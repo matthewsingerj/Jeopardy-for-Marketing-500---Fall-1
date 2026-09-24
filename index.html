@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MKT500 Marketing Jeopardy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root{
+  --ink:#0B1F3D;
+  --ink-2:#12294f;
+  --paper:#F6F4EE;
+  --gold:#D4AF37;
+  --teal:#2EC4B6;
+  --grid-line: rgba(212,175,55,0.10);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
+    radial-gradient(ellipse at top, var(--ink-2), var(--ink) 70%);
+  font-family: 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif;
+  color: var(--paper);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding: 40px 20px 60px;
+}
+header{ text-align:center; max-width:720px; margin-bottom: 36px; }
+.eyebrow{
+  letter-spacing: 4px; font-size: 12px; color: var(--teal);
+  text-transform: uppercase; font-weight: 700; margin-bottom: 10px;
+}
+h1{
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(28px, 5vw, 48px); margin: 0; color: var(--gold);
+  text-shadow: 0 2px 0 rgba(0,0,0,0.35); letter-spacing: 1px;
+}
+.subtitle{
+  margin-top: 12px; font-size: 15px; line-height: 1.5;
+  color: rgba(246,244,238,0.65);
+}
+.weeks{
+  width:100%; max-width: 920px;
+  display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.week{
+  display:block; text-decoration:none; color: inherit;
+  background: linear-gradient(180deg, #123063, #0a1c3a);
+  border: 1px solid rgba(212,175,55,0.3); border-radius: 12px;
+  padding: 20px 18px 18px;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.week:hover{
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  background: linear-gradient(180deg, #16407f, #0d234a);
+}
+.week .num{
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--teal); font-weight: 700; margin-bottom: 8px;
+}
+.week h2{
+  font-family: Georgia, serif; font-size: 20px; margin: 0 0 8px;
+  color: var(--paper); line-height: 1.25;
+}
+.week p{
+  margin: 0; font-size: 13px; line-height: 1.4;
+  color: rgba(246,244,238,0.55);
+}
+.week .play{
+  margin-top: 14px; display:inline-block;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--gold);
+}
+footer{
+  margin-top: 42px; font-size: 12px;
+  color: rgba(246,244,238,0.4); text-align:center; max-width: 560px;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Westcliff &middot; MKT500</div>
+  <h1>Marketing Jeopardy</h1>
+  <p class="subtitle">Choose a week to play. Enter your name and class, answer all 25 clues, then submit your score to the live leaderboard.</p>
+</header>
+
+<nav class="weeks" aria-label="Weekly games">
+  <a class="week" href="week1_jeopardy.html">
+    <div class="num">Week 1</div>
+    <h2>Marketing Foundations &amp; Ethics</h2>
+    <p>Meaning of marketing, philosophies, ethics &amp; CSR, triple bottom line, global marketing</p>
+    <span class="play">Play &rarr;</span>
+  </a>
+  <a class="week" href="week2_jeopardy.html">
+    <div class="num">Week 2</div>
+    <h2>Strategic Planning &amp; Environment</h2>
+    <p>Planning process, marketing plans, environment, analysis tools, and STP</p>
+    <span class="play">Play &rarr;</span>
+  </a>
+  <a class="week" href="week3_jeopardy.html">
+    <div class="num">Week 3</div>
+    <h2>Marketing Research &amp; Digital Metrics</h2>
+    <p>Research process, sampling, digital metrics, and competitive intelligence</p>
+    <span class="play">Play &rarr;</span>
+  </a>
+  <a class="week" href="week4_jeopardy.html">
+    <div class="num">Week 4</div>
+    <h2>Emerging Technologies</h2>
+    <p>Segmentation, audits, research validity, blockchain, and privacy</p>
+    <span class="play">Play &rarr;</span>
+  </a>
+  <a class="week" href="week5_jeopardy.html">
+    <div class="num">Week 5</div>
+    <h2>Marketing Mix &amp; Competition</h2>
+    <p>Products &amp; brands, pricing, channels, value chain, competitive intelligence</p>
+    <span class="play">Play &rarr;</span>
+  </a>
+  <a class="week" href="week6_jeopardy.html">
+    <div class="num">Week 6</div>
+    <h2>Consumer Behavior &amp; PLC</h2>
+    <p>Buyer behavior, product life cycle, innovation, forecasting, global PLC</p>
+    <span class="play">Play &rarr;</span>
+  </a>
+  <a class="week" href="week7_jeopardy.html">
+    <div class="num">Week 7</div>
+    <h2>Adaptive Marketing &amp; Branding</h2>
+    <p>Customer relationships, advertising &amp; PR, channels, digital, nimble orgs</p>
+    <span class="play">Play &rarr;</span>
+  </a>
+  <a class="week" href="week8_jeopardy.html">
+    <div class="num">Week 8</div>
+    <h2>Strategic Marketing Plan</h2>
+    <p>IMC, promotion mix, customer metrics, and digital marketing channels</p>
+    <span class="play">Play &rarr;</span>
+  </a>
+</nav>
+
+<footer>Each week has its own live leaderboard. Students enter name + class, finish all clues, then Submit Score once.</footer>
+</body>
+</html>

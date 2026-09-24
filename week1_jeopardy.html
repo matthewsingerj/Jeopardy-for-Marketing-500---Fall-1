@@ -4,474 +4,94 @@
 <meta charset="UTF-8">
 <title>Marketing Foundations & Ethics Jeopardy</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  :root{
-    --ink:#0B1F3D;
-    --ink-2:#12294f;
-    --paper:#F6F4EE;
-    --gold:#D4AF37;
-    --gold-dim:#a9872c;
-    --teal:#2EC4B6;
-    --coral:#FF6B6B;
-    --grid-line: rgba(212,175,55,0.10);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    background:
-      linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
-      radial-gradient(ellipse at top, var(--ink-2), var(--ink) 70%);
-    font-family: 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif;
-    color: var(--paper);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding: 28px 16px 60px;
-  }
-  header{
-    text-align:center;
-    margin-bottom: 22px;
-  }
-  .eyebrow{
-    letter-spacing: 4px;
-    font-size: 12px;
-    color: var(--teal);
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  h1{
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(26px, 4.6vw, 44px);
-    margin: 0;
-    color: var(--gold);
-    text-shadow: 0 2px 0 rgba(0,0,0,0.35);
-    letter-spacing: 1px;
-  }
-  .subtitle{
-    margin-top: 8px;
-    font-size: 14px;
-    color: rgba(246,244,238,0.65);
-  }
-
-  .scoreboard{
-    display:flex;
-    gap:14px;
-    align-items:center;
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 999px;
-    padding: 10px 22px;
-    margin-bottom: 26px;
-    font-variant-numeric: tabular-nums;
-  }
-  .scoreboard .label{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    color: rgba(246,244,238,0.6);
-  }
-  .scoreboard .value{
-    font-size: 26px;
-    font-weight:700;
-    color: var(--gold);
-    min-width: 70px;
-    text-align:center;
-  }
-  .scoreboard.negative .value{ color: var(--coral); }
-
-  .board{
-    width: 100%;
-    max-width: 1200px;
-    display:grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    background: rgba(0,0,0,0.2);
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(212,175,55,0.25);
-  }
-  .cat-header{
-    background: linear-gradient(180deg, #0f2a52, #0a1c3a);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 6px;
-    padding: 14px 8px;
-    text-align:center;
-    font-weight:700;
-    font-size: clamp(11px, 1.3vw, 14px);
-    text-transform:uppercase;
-    letter-spacing: 0.5px;
-    color: var(--paper);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height: 68px;
-    line-height:1.25;
-  }
-  .cell{
-    background: linear-gradient(180deg, #123063, #0b1f3f);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 6px;
-    padding: 18px 6px;
-    text-align:center;
-    font-family: Georgia, serif;
-    font-weight:700;
-    font-size: clamp(18px, 2.6vw, 26px);
-    color: var(--gold);
-    cursor:pointer;
-    transition: transform .12s ease, background .12s ease;
-    user-select:none;
-  }
-  .cell:hover:not(.used){
-    transform: translateY(-2px);
-    background: linear-gradient(180deg, #16407f, #0d234a);
-  }
-  .cell.used{
-    color: rgba(212,175,55,0.22);
-    cursor: default;
-    background: rgba(0,0,0,0.25);
-  }
-  .cell.used::after{
-    content: "✓";
-    display:block;
-    font-size: 14px;
-    margin-top: 4px;
-    color: rgba(46,196,182,0.4);
-  }
-
-  footer{
-    margin-top: 34px;
-    font-size: 12px;
-    color: rgba(246,244,238,0.4);
-    text-align:center;
-  }
-
-  /* Modal */
-  .overlay{
-    position: fixed; inset:0;
-    background: rgba(4,10,22,0.85);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding: 20px;
-    z-index: 50;
-  }
-  .overlay.open{ display:flex; }
-  .modal{
-    background: linear-gradient(180deg, #123063, #0a1c3a);
-    border: 1px solid rgba(212,175,55,0.4);
-    border-radius: 12px;
-    max-width: 720px;
-    width:100%;
-    padding: 34px 30px 26px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    text-align:center;
-  }
-  .modal .tag{
-    color: var(--teal);
-    font-size: 12px;
-    text-transform:uppercase;
-    letter-spacing:3px;
-    font-weight:700;
-    margin-bottom: 10px;
-  }
-  .modal .value-tag{
-    color: var(--gold);
-    font-size:14px;
-    font-weight:700;
-    margin-bottom: 18px;
-  }
-  .modal .question{
-    font-family: Georgia, serif;
-    font-size: clamp(18px, 2.6vw, 24px);
-    line-height:1.45;
-    margin-bottom: 26px;
-    color: var(--paper);
-  }
-  .choices{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  @media (max-width:520px){ .choices{ grid-template-columns: 1fr; } }
-  .choice{
-    background: rgba(246,244,238,0.06);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 8px;
-    padding: 14px 12px;
-    color: var(--paper);
-    font-size: 15px;
-    text-align:left;
-    cursor:pointer;
-    transition: background .12s ease, border-color .12s ease;
-  }
-  .choice:hover:not(.locked){
-    background: rgba(212,175,55,0.14);
-    border-color: var(--gold);
-  }
-  .choice .letter{
-    display:inline-block;
-    width: 22px;
-    height:22px;
-    line-height:22px;
-    border-radius:50%;
-    background: rgba(212,175,55,0.25);
-    color: var(--gold);
-    font-weight:700;
-    font-size: 12px;
-    margin-right: 10px;
-    text-align:center;
-  }
-  .choice.correct{
-    background: rgba(46,196,182,0.22);
-    border-color: var(--teal);
-  }
-  .choice.wrong{
-    background: rgba(255,107,107,0.2);
-    border-color: var(--coral);
-  }
-  .feedback{
-    min-height: 22px;
-    font-weight:700;
-    margin-bottom: 14px;
-  }
-  .feedback.correct-text{ color: var(--teal); }
-  .feedback.wrong-text{ color: var(--coral); }
-
-  .close-btn{
-    background: var(--gold);
-    color: var(--ink);
-    border:none;
-    padding: 10px 26px;
-    border-radius: 999px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:14px;
-    letter-spacing: 0.5px;
-  }
-  .close-btn:hover{ background:#e8c765; }
-  .close-btn:disabled{
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-
-  .reset-btn{
-    margin-top: 4px;
-    background: transparent;
-    color: rgba(246,244,238,0.55);
-    border: 1px solid rgba(246,244,238,0.25);
-    padding: 8px 18px;
-    border-radius: 999px;
-    font-size: 12px;
-    cursor:pointer;
-  }
-  .reset-btn:hover{
-    color: var(--paper);
-    border-color: var(--gold);
-  }
-</style>
+<link rel="stylesheet" href="assets/jeopardy.css">
 </head>
 <body>
-
-<header>
-  <div class="eyebrow">Week 1 · Marketing Foundations and Ethics</div>
-  <h1>Marketing Foundations Jeopardy</h1>
-  <div class="subtitle">The meaning of marketing, philosophies, ethics &amp; CSR, the triple bottom line, and global marketing</div>
-</header>
-
-<div class="scoreboard" id="scoreboard">
-  <span class="label">Score</span>
-  <span class="value" id="scoreValue">$0</span>
-  <button class="reset-btn" id="resetBtn">Reset Game</button>
-</div>
-
-<div class="board" id="board"></div>
-
-<footer>Click a dollar value to open the clue. Answers are locked in once selected.</footer>
-
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="tag" id="modalCat">Category</div>
-    <div class="value-tag" id="modalValue">$100</div>
-    <div class="question" id="modalQuestion">Question text</div>
-    <div class="choices" id="modalChoices"></div>
-    <div class="feedback" id="modalFeedback"></div>
-    <button class="close-btn" id="closeBtn" disabled>Close</button>
-  </div>
-</div>
-
 <script>
-const DATA = [
-  {
-    category: "Foundations of Marketing",
-    questions: [
-      { value:100, q:"Marketing is best defined as the process of:",
-        options:["Creating, communicating, delivering, and exchanging value with customers and other stakeholders","Only advertising a company's products","Reducing production costs","Managing a company's payroll"], correct:0 },
-      { value:200, q:"Which best describes 'marketing management'?",
-        options:["Managing a company's factory equipment","The art and science of choosing target markets and building profitable relationships with customers","Managing employee vacation requests","Setting a company's legal policies"], correct:1 },
-      { value:300, q:"Demand management refers to a marketer's task of:",
-        options:["Eliminating all customer demand","Ignoring fluctuations in customer interest","Managing the level, timing, and composition of customer demand to meet an organization's objectives","Setting prices without regard to demand"], correct:2 },
-      { value:400, q:"Business-to-business (B2B) marketing differs from consumer marketing primarily because it involves:",
-        options:["Only impulse purchases","Marketing exclusively through social media influencers","No professional buyers","Organizational buyers making purchase decisions, often involving longer sales cycles and multiple decision-makers"], correct:3 },
-      { value:500, q:"A 'market' in marketing terms refers to:",
-        options:["The set of actual and potential buyers of a product or service","Only the physical building where goods are sold","A company's internal accounting department","A single competitor's product line"], correct:0 }
-    ]
-  },
-  {
-    category: "Marketing Philosophies & Concepts",
-    questions: [
-      { value:100, q:"The production concept holds that consumers favor products that are:",
-        options:["Expensive and exclusive","Widely available and inexpensive","Heavily advertised","Customized for each individual buyer"], correct:1 },
-      { value:200, q:"The selling concept assumes that consumers:",
-        options:["Will buy enough of a company's products without any promotion","Only care about product quality","Will not buy enough unless the company undertakes a substantial selling and promotion effort","Always know exactly what they want before shopping"], correct:2 },
-      { value:300, q:"The marketing concept holds that achieving organizational goals depends on:",
-        options:["Producing as much as possible at the lowest cost","Ignoring competitors entirely","Selling whatever the company already makes","Understanding the needs and wants of target markets and delivering value better than competitors"], correct:3 },
-      { value:400, q:"The societal marketing concept adds to the marketing concept the idea that companies should also consider:",
-        options:["Society's well-being and long-term interests, not just immediate consumer wants","Only maximizing short-term profit","Eliminating all customer research","Reducing product quality to cut costs"], correct:0 },
-      { value:500, q:"Which best represents the different 'market types' marketers consider?",
-        options:["Only online versus offline markets","Consumer markets, business markets, global markets, and nonprofit/government markets, among others","Only domestic markets","Only markets for physical goods"], correct:1 }
-    ]
-  },
-  {
-    category: "Marketing Ethics & CSR",
-    questions: [
-      { value:100, q:"Marketing ethics refers to:",
-        options:["The legal department's exclusive responsibility","A set of rules that only apply to advertising","Principles and standards that guide acceptable conduct in marketing activities","A marketing tactic used only by nonprofits"], correct:2 },
-      { value:200, q:"Corporate social responsibility (CSR) refers to a company's commitment to:",
-        options:["Maximizing shareholder profit exclusively, with no other considerations","Avoiding all forms of community involvement","Following only the minimum legal requirements","Improving the well-being of society and the environment alongside its business operations"], correct:3 },
-      { value:300, q:"Ethics in marketing research specifically involves concerns such as:",
-        options:["Protecting respondent privacy, obtaining informed consent, and avoiding deceptive research practices","Maximizing the number of leading questions used","Publishing respondent names publicly","Ignoring data accuracy"], correct:0 },
-      { value:400, q:"A company practicing strong marketing ethics would most likely:",
-        options:["Exaggerate product claims to boost sales","Provide accurate, transparent information about its products to consumers","Target vulnerable populations with misleading offers","Hide known product safety issues"], correct:1 },
-      { value:500, q:"Sustainability in marketing refers to:",
-        options:["Focusing solely on short-term sales growth","Ignoring environmental impact to reduce costs","Meeting present business and consumer needs without compromising the ability of future generations to meet their own needs","A one-time marketing campaign about recycling"], correct:2 }
-    ]
-  },
-  {
-    category: "The Triple Bottom Line",
-    questions: [
-      { value:100, q:"The triple bottom line framework evaluates business performance based on:",
-        options:["Only financial profit","Only employee satisfaction","Only advertising reach","Profit, people, and planet"], correct:3 },
-      { value:200, q:"In the triple bottom line, the 'people' component refers to a company's:",
-        options:["Social and societal impact on employees, customers, and communities","Manufacturing equipment","Stock price performance","Product packaging materials"], correct:0 },
-      { value:300, q:"In the triple bottom line, the 'planet' component focuses on:",
-        options:["A company's quarterly earnings report","A business's environmental impact, such as reducing its carbon footprint","Employee recruitment strategies","Customer loyalty programs"], correct:1 },
-      { value:400, q:"One benefit of adopting a triple bottom line approach, according to HBS Online, is that:",
-        options:["It guarantees higher short-term profits with no added cost","It eliminates the need for financial reporting","Purpose-driven consumers represent a large market segment willing to pay more for sustainable products","It removes any need to measure environmental impact"], correct:2 },
-      { value:500, q:"A key challenge of implementing the triple bottom line, as noted by IMD, is:",
-        options:["There are too many standardized financial metrics to choose from","Consumers are indifferent to sustainability","It costs nothing to switch to sustainable practices","The lack of standardized metrics for measuring social and environmental impact"], correct:3 }
-    ]
-  },
-  {
-    category: "Global Marketing",
-    questions: [
-      { value:100, q:"Global marketing involves:",
-        options:["Planning and conducting marketing activities across national and cultural boundaries","Marketing only within a single country","Ignoring cultural differences between markets","Selling exclusively to domestic customers"], correct:0 },
-      { value:200, q:"A key challenge companies face when expanding into global markets is:",
-        options:["Markets everywhere behave identically","Adapting products, pricing, and messaging to different cultural, legal, and economic environments","Global marketing requires no research","Currency exchange rates never matter"], correct:1 },
-      { value:300, q:"'Beyond expansion' in global marketing suggests that successful global strategy requires more than just:",
-        options:["Building strong local partnerships","Understanding local regulations","Simply entering new markets without adapting to local needs and conditions","Researching consumer behavior"], correct:2 },
-      { value:400, q:"Global standardization strategy involves:",
-        options:["Creating entirely unique products for every single market","Ignoring cost efficiencies across markets","Randomly changing marketing strategy in every country","Using largely the same marketing strategy and mix worldwide to achieve cost efficiencies"], correct:3 },
-      { value:500, q:"Global adaptation strategy, by contrast, involves:",
-        options:["Adjusting marketing strategy and offerings to fit the unique needs of each local market","Using an identical strategy in every country regardless of differences","Avoiding any market research before entry","Selling only in the company's home country"], correct:0 }
-    ]
-  }
-];
-
-let score = 0;
-const usedSet = new Set();
-let currentKey = null;
-
-function rebuildGrid(){
-  const board = document.getElementById('board');
-  board.style.gridTemplateRows = 'auto repeat(5, 1fr)';
-  board.innerHTML = '';
-  DATA.forEach((cat)=>{
-    const header = document.createElement('div');
-    header.className = 'cat-header';
-    header.textContent = cat.category;
-    board.appendChild(header);
-  });
-  for(let row=0; row<5; row++){
-    DATA.forEach((cat, ci)=>{
-      const q = cat.questions[row];
-      const key = ci + '-' + row;
-      const cell = document.createElement('div');
-      cell.className = 'cell' + (usedSet.has(key) ? ' used' : '');
-      cell.textContent = '$' + q.value;
-      if(!usedSet.has(key)){
-        cell.addEventListener('click', () => openModal(ci, row));
-      }
-      board.appendChild(cell);
-    });
-  }
-  document.getElementById('scoreValue').textContent = (score < 0 ? '-$' + Math.abs(score) : '$' + score);
-  document.getElementById('scoreboard').classList.toggle('negative', score < 0);
+window.JEOPARDY = {
+  boardId: "week1",
+  eyebrow: "Week 1 &middot; Marketing Foundations and Ethics",
+  title: "Marketing Foundations Jeopardy",
+  subtitle: "The meaning of marketing, philosophies, ethics &amp; CSR, the triple bottom line, and global marketing",
+  data: [
+{
+category: "Foundations of Marketing",
+questions: [
+{ value:100, q:"Marketing is best defined as the process of:",
+options:["Managing a company's payroll","Reducing production costs","Creating, communicating, delivering, and exchanging value with customers and other stakeholders","Only advertising a company's products"], k:"lWLbQcE5I5DTHvBeoR6u4s" },
+{ value:200, q:"Which best describes 'marketing management'?",
+options:["Setting a company's legal policies","The art and science of choosing target markets and building profitable relationships with customers","Managing employee vacation requests","Managing a company's factory equipment"], k:"NV_qU5zZ0zSeILz5VEsbpA" },
+{ value:300, q:"Demand management refers to a marketer's task of:",
+options:["Ignoring fluctuations in customer interest","Eliminating all customer demand","Setting prices without regard to demand","Managing the level, timing, and composition of customer demand to meet an organization's objectives"], k:"xuYuKEjE5P8z37OvqZrvyP" },
+{ value:400, q:"Business-to-business (B2B) marketing differs from consumer marketing primarily because it involves:",
+options:["Organizational buyers making purchase decisions, often involving longer sales cycles and multiple decision-makers","No professional buyers","Marketing exclusively through social media influencers","Only impulse purchases"], k:"1idKHfoG0cL59RUvU7rppr" },
+{ value:500, q:"A 'market' in marketing terms refers to:",
+options:["The set of actual and potential buyers of a product or service","A company's internal accounting department","A single competitor's product line","Only the physical building where goods are sold"], k:"m-o2AUZmm2rlED67uf8eaQ" }
+]
+},
+{
+category: "Marketing Philosophies & Concepts",
+questions: [
+{ value:100, q:"The production concept holds that consumers favor products that are:",
+options:["Expensive and exclusive","Heavily advertised","Customized for each individual buyer","Widely available and inexpensive"], k:"02q_Iq2wOCgUCQGwaMzy4n" },
+{ value:200, q:"The selling concept assumes that consumers:",
+options:["Will not buy enough unless the company undertakes a substantial selling and promotion effort","Will buy enough of a company's products without any promotion","Always know exactly what they want before shopping","Only care about product quality"], k:"VZjuaohjptrgNMuSDCReyY" },
+{ value:300, q:"The marketing concept holds that achieving organizational goals depends on:",
+options:["Ignoring competitors entirely","Understanding the needs and wants of target markets and delivering value better than competitors","Producing as much as possible at the lowest cost","Selling whatever the company already makes"], k:"3rHIRpmAg24FfpahsRwcqw" },
+{ value:400, q:"The societal marketing concept adds to the marketing concept the idea that companies should also consider:",
+options:["Eliminating all customer research","Reducing product quality to cut costs","Only maximizing short-term profit","Society's well-being and long-term interests, not just immediate consumer wants"], k:"5RVBrQy1ExR4AackqfH2ZJ" },
+{ value:500, q:"Which best represents the different 'market types' marketers consider?",
+options:["Consumer markets, business markets, global markets, and nonprofit/government markets, among others","Only markets for physical goods","Only online versus offline markets","Only domestic markets"], k:"bStjdbi9nLsMC6BiXUG81U" }
+]
+},
+{
+category: "Marketing Ethics & CSR",
+questions: [
+{ value:100, q:"Marketing ethics refers to:",
+options:["Principles and standards that guide acceptable conduct in marketing activities","The legal department's exclusive responsibility","A marketing tactic used only by nonprofits","A set of rules that only apply to advertising"], k:"IBVYyNh3A9mQn8XFdKbc7Q" },
+{ value:200, q:"Corporate social responsibility (CSR) refers to a company's commitment to:",
+options:["Improving the well-being of society and the environment alongside its business operations","Maximizing shareholder profit exclusively, with no other considerations","Avoiding all forms of community involvement","Following only the minimum legal requirements"], k:"CpQHkJUDxO-HnDc1YQK0t4" },
+{ value:300, q:"Ethics in marketing research specifically involves concerns such as:",
+options:["Protecting respondent privacy, obtaining informed consent, and avoiding deceptive research practices","Publishing respondent names publicly","Ignoring data accuracy","Maximizing the number of leading questions used"], k:"_PIulg6fcOPSRHGB2i1GE6" },
+{ value:400, q:"A company practicing strong marketing ethics would most likely:",
+options:["Hide known product safety issues","Target vulnerable populations with misleading offers","Provide accurate, transparent information about its products to consumers","Exaggerate product claims to boost sales"], k:"dg0KfR75tzjejzq32iTdo2" },
+{ value:500, q:"Sustainability in marketing refers to:",
+options:["A one-time marketing campaign about recycling","Focusing solely on short-term sales growth","Meeting present business and consumer needs without compromising the ability of future generations to meet their own needs","Ignoring environmental impact to reduce costs"], k:"kUEOsReLqn2foW3Wy6jRM9" }
+]
+},
+{
+category: "The Triple Bottom Line",
+questions: [
+{ value:100, q:"The triple bottom line framework evaluates business performance based on:",
+options:["Only advertising reach","Only financial profit","Profit, people, and planet","Only employee satisfaction"], k:"p7IRBYKigjCwIQ7uGVRWj_" },
+{ value:200, q:"In the triple bottom line, the 'people' component refers to a company's:",
+options:["Product packaging materials","Stock price performance","Social and societal impact on employees, customers, and communities","Manufacturing equipment"], k:"R3bl6vrnd6Z1Dp_C-4kHSh" },
+{ value:300, q:"In the triple bottom line, the 'planet' component focuses on:",
+options:["Customer loyalty programs","A business's environmental impact, such as reducing its carbon footprint","A company's quarterly earnings report","Employee recruitment strategies"], k:"ju-FeIhGmkeG33IgIndTw-" },
+{ value:400, q:"One benefit of adopting a triple bottom line approach, according to HBS Online, is that:",
+options:["It eliminates the need for financial reporting","It guarantees higher short-term profits with no added cost","Purpose-driven consumers represent a large market segment willing to pay more for sustainable products","It removes any need to measure environmental impact"], k:"cYmWUWzPk_K-ac-yDrtoxt" },
+{ value:500, q:"A key challenge of implementing the triple bottom line, as noted by IMD, is:",
+options:["The lack of standardized metrics for measuring social and environmental impact","Consumers are indifferent to sustainability","It costs nothing to switch to sustainable practices","There are too many standardized financial metrics to choose from"], k:"xePwZFy80-UubnrRpvQ0u6" }
+]
+},
+{
+category: "Global Marketing",
+questions: [
+{ value:100, q:"Global marketing involves:",
+options:["Marketing only within a single country","Ignoring cultural differences between markets","Planning and conducting marketing activities across national and cultural boundaries","Selling exclusively to domestic customers"], k:"s7H6XW1DSO1ts5e4h-CcYE" },
+{ value:200, q:"A key challenge companies face when expanding into global markets is:",
+options:["Global marketing requires no research","Currency exchange rates never matter","Markets everywhere behave identically","Adapting products, pricing, and messaging to different cultural, legal, and economic environments"], k:"tqSnq0XO02p9ePlyrkvK_Q" },
+{ value:300, q:"'Beyond expansion' in global marketing suggests that successful global strategy requires more than just:",
+options:["Researching consumer behavior","Building strong local partnerships","Understanding local regulations","Simply entering new markets without adapting to local needs and conditions"], k:"eJJKKyVAvYJMXjf_lDb-fb" },
+{ value:400, q:"Global standardization strategy involves:",
+options:["Randomly changing marketing strategy in every country","Ignoring cost efficiencies across markets","Creating entirely unique products for every single market","Using largely the same marketing strategy and mix worldwide to achieve cost efficiencies"], k:"QS3P7quCb66FrQzyWa0vSj" },
+{ value:500, q:"Global adaptation strategy, by contrast, involves:",
+options:["Avoiding any market research before entry","Selling only in the company's home country","Using an identical strategy in every country regardless of differences","Adjusting marketing strategy and offerings to fit the unique needs of each local market"], k:"4vHkA3vulSPGysdPp8LBJm" }
+]
 }
-
-function openModal(ci, qi){
-  const cat = DATA[ci];
-  const q = cat.questions[qi];
-  currentKey = ci + '-' + qi;
-
-  document.getElementById('modalCat').textContent = cat.category;
-  document.getElementById('modalValue').textContent = '$' + q.value;
-  document.getElementById('modalQuestion').textContent = q.q;
-  document.getElementById('modalFeedback').textContent = '';
-  document.getElementById('modalFeedback').className = 'feedback';
-  document.getElementById('closeBtn').disabled = true;
-
-  const choicesEl = document.getElementById('modalChoices');
-  choicesEl.innerHTML = '';
-  const letters = ['A','B','C','D'];
-  q.options.forEach((opt, idx) => {
-    const div = document.createElement('div');
-    div.className = 'choice';
-    div.innerHTML = '<span class="letter">' + letters[idx] + '</span>' + opt;
-    div.addEventListener('click', () => selectAnswer(idx, q, div, choicesEl));
-    choicesEl.appendChild(div);
-  });
-
-  document.getElementById('overlay').classList.add('open');
-}
-
-function selectAnswer(idx, q, el, container){
-  Array.from(container.children).forEach(c => c.classList.add('locked'));
-  const feedback = document.getElementById('modalFeedback');
-
-  if(idx === q.correct){
-    el.classList.add('correct');
-    score += q.value;
-    feedback.textContent = 'Correct! +$' + q.value;
-    feedback.className = 'feedback correct-text';
-  } else {
-    el.classList.add('wrong');
-    Array.from(container.children)[q.correct].classList.add('correct');
-    score -= q.value;
-    feedback.textContent = 'Not quite. -$' + q.value;
-    feedback.className = 'feedback wrong-text';
-  }
-  usedSet.add(currentKey);
-  document.getElementById('closeBtn').disabled = false;
-}
-
-document.getElementById('closeBtn').addEventListener('click', () => {
-  document.getElementById('overlay').classList.remove('open');
-  rebuildGrid();
-});
-
-document.getElementById('resetBtn').addEventListener('click', () => {
-  score = 0;
-  usedSet.clear();
-  rebuildGrid();
-});
-
-rebuildGrid();
+]
+};
 </script>
-
+<script src="assets/jeopardy.js"></script>
 </body>
 </html>

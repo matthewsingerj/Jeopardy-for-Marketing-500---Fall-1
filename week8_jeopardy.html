@@ -4,474 +4,94 @@
 <meta charset="UTF-8">
 <title>Strategic Marketing Plan Jeopardy</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  :root{
-    --ink:#0B1F3D;
-    --ink-2:#12294f;
-    --paper:#F6F4EE;
-    --gold:#D4AF37;
-    --gold-dim:#a9872c;
-    --teal:#2EC4B6;
-    --coral:#FF6B6B;
-    --grid-line: rgba(212,175,55,0.10);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    background:
-      linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
-      radial-gradient(ellipse at top, var(--ink-2), var(--ink) 70%);
-    font-family: 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif;
-    color: var(--paper);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding: 28px 16px 60px;
-  }
-  header{
-    text-align:center;
-    margin-bottom: 22px;
-  }
-  .eyebrow{
-    letter-spacing: 4px;
-    font-size: 12px;
-    color: var(--teal);
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  h1{
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(26px, 4.6vw, 44px);
-    margin: 0;
-    color: var(--gold);
-    text-shadow: 0 2px 0 rgba(0,0,0,0.35);
-    letter-spacing: 1px;
-  }
-  .subtitle{
-    margin-top: 8px;
-    font-size: 14px;
-    color: rgba(246,244,238,0.65);
-  }
-
-  .scoreboard{
-    display:flex;
-    gap:14px;
-    align-items:center;
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 999px;
-    padding: 10px 22px;
-    margin-bottom: 26px;
-    font-variant-numeric: tabular-nums;
-  }
-  .scoreboard .label{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    color: rgba(246,244,238,0.6);
-  }
-  .scoreboard .value{
-    font-size: 26px;
-    font-weight:700;
-    color: var(--gold);
-    min-width: 70px;
-    text-align:center;
-  }
-  .scoreboard.negative .value{ color: var(--coral); }
-
-  .board{
-    width: 100%;
-    max-width: 1200px;
-    display:grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    background: rgba(0,0,0,0.2);
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(212,175,55,0.25);
-  }
-  .cat-header{
-    background: linear-gradient(180deg, #0f2a52, #0a1c3a);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 6px;
-    padding: 14px 8px;
-    text-align:center;
-    font-weight:700;
-    font-size: clamp(11px, 1.3vw, 14px);
-    text-transform:uppercase;
-    letter-spacing: 0.5px;
-    color: var(--paper);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height: 68px;
-    line-height:1.25;
-  }
-  .cell{
-    background: linear-gradient(180deg, #123063, #0b1f3f);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 6px;
-    padding: 18px 6px;
-    text-align:center;
-    font-family: Georgia, serif;
-    font-weight:700;
-    font-size: clamp(18px, 2.6vw, 26px);
-    color: var(--gold);
-    cursor:pointer;
-    transition: transform .12s ease, background .12s ease;
-    user-select:none;
-  }
-  .cell:hover:not(.used){
-    transform: translateY(-2px);
-    background: linear-gradient(180deg, #16407f, #0d234a);
-  }
-  .cell.used{
-    color: rgba(212,175,55,0.22);
-    cursor: default;
-    background: rgba(0,0,0,0.25);
-  }
-  .cell.used::after{
-    content: "✓";
-    display:block;
-    font-size: 14px;
-    margin-top: 4px;
-    color: rgba(46,196,182,0.4);
-  }
-
-  footer{
-    margin-top: 34px;
-    font-size: 12px;
-    color: rgba(246,244,238,0.4);
-    text-align:center;
-  }
-
-  /* Modal */
-  .overlay{
-    position: fixed; inset:0;
-    background: rgba(4,10,22,0.85);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding: 20px;
-    z-index: 50;
-  }
-  .overlay.open{ display:flex; }
-  .modal{
-    background: linear-gradient(180deg, #123063, #0a1c3a);
-    border: 1px solid rgba(212,175,55,0.4);
-    border-radius: 12px;
-    max-width: 720px;
-    width:100%;
-    padding: 34px 30px 26px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    text-align:center;
-  }
-  .modal .tag{
-    color: var(--teal);
-    font-size: 12px;
-    text-transform:uppercase;
-    letter-spacing:3px;
-    font-weight:700;
-    margin-bottom: 10px;
-  }
-  .modal .value-tag{
-    color: var(--gold);
-    font-size:14px;
-    font-weight:700;
-    margin-bottom: 18px;
-  }
-  .modal .question{
-    font-family: Georgia, serif;
-    font-size: clamp(18px, 2.6vw, 24px);
-    line-height:1.45;
-    margin-bottom: 26px;
-    color: var(--paper);
-  }
-  .choices{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  @media (max-width:520px){ .choices{ grid-template-columns: 1fr; } }
-  .choice{
-    background: rgba(246,244,238,0.06);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 8px;
-    padding: 14px 12px;
-    color: var(--paper);
-    font-size: 15px;
-    text-align:left;
-    cursor:pointer;
-    transition: background .12s ease, border-color .12s ease;
-  }
-  .choice:hover:not(.locked){
-    background: rgba(212,175,55,0.14);
-    border-color: var(--gold);
-  }
-  .choice .letter{
-    display:inline-block;
-    width: 22px;
-    height:22px;
-    line-height:22px;
-    border-radius:50%;
-    background: rgba(212,175,55,0.25);
-    color: var(--gold);
-    font-weight:700;
-    font-size: 12px;
-    margin-right: 10px;
-    text-align:center;
-  }
-  .choice.correct{
-    background: rgba(46,196,182,0.22);
-    border-color: var(--teal);
-  }
-  .choice.wrong{
-    background: rgba(255,107,107,0.2);
-    border-color: var(--coral);
-  }
-  .feedback{
-    min-height: 22px;
-    font-weight:700;
-    margin-bottom: 14px;
-  }
-  .feedback.correct-text{ color: var(--teal); }
-  .feedback.wrong-text{ color: var(--coral); }
-
-  .close-btn{
-    background: var(--gold);
-    color: var(--ink);
-    border:none;
-    padding: 10px 26px;
-    border-radius: 999px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:14px;
-    letter-spacing: 0.5px;
-  }
-  .close-btn:hover{ background:#e8c765; }
-  .close-btn:disabled{
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-
-  .reset-btn{
-    margin-top: 4px;
-    background: transparent;
-    color: rgba(246,244,238,0.55);
-    border: 1px solid rgba(246,244,238,0.25);
-    padding: 8px 18px;
-    border-radius: 999px;
-    font-size: 12px;
-    cursor:pointer;
-  }
-  .reset-btn:hover{
-    color: var(--paper);
-    border-color: var(--gold);
-  }
-</style>
+<link rel="stylesheet" href="assets/jeopardy.css">
 </head>
 <body>
-
-<header>
-  <div class="eyebrow">Week 8 · Strategic Marketing Plan</div>
-  <h1>Strategic Marketing Plan Jeopardy</h1>
-  <div class="subtitle">Integrated marketing communications, promotion mix, customer metrics, and digital marketing channels</div>
-</header>
-
-<div class="scoreboard" id="scoreboard">
-  <span class="label">Score</span>
-  <span class="value" id="scoreValue">$0</span>
-  <button class="reset-btn" id="resetBtn">Reset Game</button>
-</div>
-
-<div class="board" id="board"></div>
-
-<footer>Click a dollar value to open the clue. Answers are locked in once selected.</footer>
-
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="tag" id="modalCat">Category</div>
-    <div class="value-tag" id="modalValue">$100</div>
-    <div class="question" id="modalQuestion">Question text</div>
-    <div class="choices" id="modalChoices"></div>
-    <div class="feedback" id="modalFeedback"></div>
-    <button class="close-btn" id="closeBtn" disabled>Close</button>
-  </div>
-</div>
-
 <script>
-const DATA = [
-  {
-    category: "Integrated Marketing Communications",
-    questions: [
-      { value:100, q:"Integrated marketing communications (IMC) is best defined as:",
-        options:["Coordinating all promotional tools so they deliver a clear, consistent, and compelling message about an organization and its products","Using only one promotional tool at a time","A company's internal accounting process","Setting prices independently of any promotional strategy"], correct:0 },
-      { value:200, q:"The main goal of IMC is to:",
-        options:["Confuse customers with mixed brand messages","Ensure all communication channels work together to reinforce a unified brand message","Eliminate the need for advertising","Focus exclusively on personal selling"], correct:1 },
-      { value:300, q:"Which of the following is typically part of the promotion mix coordinated under IMC?",
-        options:["Only product packaging","Only distribution channels","Advertising, sales promotion, public relations, personal selling, and direct marketing","Only pricing strategy"], correct:2 },
-      { value:400, q:"A key challenge of implementing IMC is:",
-        options:["It requires using only a single communication channel","It has no impact on brand perception","It never needs cross-department coordination","Coordinating multiple departments and agencies to deliver one consistent message"], correct:3 },
-      { value:500, q:"IMC is important because inconsistent messaging across channels can:",
-        options:["Confuse customers and weaken brand image","Always increase sales regardless of message clarity","Have no effect on customer perception","Guarantee higher customer loyalty"], correct:0 }
-    ]
-  },
-  {
-    category: "Advertising, Promotion, PR & Personal Selling",
-    questions: [
-      { value:100, q:"Personal selling is best described as:",
-        options:["Mass, non-personal communication through paid media","Direct, personal presentation by a company's sales force to make sales and build customer relationships","A short-term discount offered at checkout","Free media coverage of a company"], correct:1 },
-      { value:200, q:"Sales management involves:",
-        options:["Only creating television advertisements","Setting product prices exclusively","Planning, directing, and controlling personal selling activities, including recruiting, training, and motivating a sales force","Managing a company's supply chain"], correct:2 },
-      { value:300, q:"A sales promotion such as a limited-time discount is designed to:",
-        options:["Build long-term brand image exclusively","Replace the need for a sales force entirely","Generate free publicity only","Stimulate quicker or greater purchase of a product"], correct:3 },
-      { value:400, q:"Public relations activities such as press releases and events are used to:",
-        options:["Build and maintain a favorable public image for the organization","Directly close individual sales","Set retail prices","Manage a company's inventory levels"], correct:0 },
-      { value:500, q:"Compared to advertising, personal selling generally offers:",
-        options:["Lower cost per customer contact for mass audiences","More opportunity for direct, personalized interaction and immediate feedback","No ability to tailor a message to an individual customer","A completely non-personal customer experience"], correct:1 }
-    ]
-  },
-  {
-    category: "Customer Metrics",
-    questions: [
-      { value:100, q:"Customer churn refers to:",
-        options:["The number of new customers acquired each month","A company's total revenue","The rate at which customers stop doing business with a company over a given period","The average price customers pay for a product"], correct:2 },
-      { value:200, q:"Expansion revenue refers to revenue generated from:",
-        options:["Brand-new customers only","One-time discounted sales","Refunds issued to unhappy customers","Existing customers who upgrade, purchase additional products, or expand their usage"], correct:3 },
-      { value:300, q:"Net Promoter Score (NPS) is a metric used to measure:",
-        options:["Customer loyalty and the likelihood that customers will recommend a company to others","A company's total annual profit","The number of employees in the marketing department","Website loading speed"], correct:0 },
-      { value:400, q:"A high customer churn rate typically signals that a company should:",
-        options:["Ignore the issue since churn has no business impact","Investigate causes of dissatisfaction and improve retention efforts","Immediately raise prices for all customers","Stop measuring customer satisfaction altogether"], correct:1 },
-      { value:500, q:"Tracking customer satisfaction over time helps a company:",
-        options:["Avoid ever changing its products or services","Eliminate the need for customer feedback","Identify trends and address problems before they lead to increased churn","Set employee salaries"], correct:2 }
-    ]
-  },
-  {
-    category: "Digital Marketing Channels & Techniques",
-    questions: [
-      { value:100, q:"Search engine optimization (SEO) involves:",
-        options:["Paying for every single website visitor","Sending unsolicited emails to random addresses","Placing ads exclusively on social media","Improving a website's visibility in organic (unpaid) search engine results"], correct:3 },
-      { value:200, q:"Pay-per-click (PPC) advertising is a model in which advertisers:",
-        options:["Pay a fee each time a user clicks on one of their ads","Pay a flat fee regardless of ad performance","Never pay for advertising placement","Only pay for print advertisements"], correct:0 },
-      { value:300, q:"One noted advantage of digital display advertising is that it:",
-        options:["Cannot be targeted to specific audiences","Can use visually engaging formats to build brand awareness across many websites","Is always more effective than search advertising","Requires no design or creative work"], correct:1 },
-      { value:400, q:"One noted disadvantage of digital display advertising is:",
-        options:["It is impossible to measure performance","It cannot include images or graphics","Banner blindness, where users learn to ignore display ads, reducing effectiveness","It only works for physical retail businesses"], correct:2 },
-      { value:500, q:"Mobile marketing refers to marketing activities that:",
-        options:["Only occur through desktop computers","Ignore consumers' use of smartphones","Are limited exclusively to print media","Reach consumers through smartphones and other mobile devices, such as via apps, SMS, or mobile-optimized ads"], correct:3 }
-    ]
-  },
-  {
-    category: "Digital Marketing Skills & Ecosystem",
-    questions: [
-      { value:100, q:"Hard skills in digital marketing typically include:",
-        options:["Technical abilities such as SEO, analytics tools, and paid advertising platform management","Only interpersonal communication skills","Only creativity with no technical component","Physical strength and manual labor skills"], correct:0 },
-      { value:200, q:"Soft skills in digital marketing include abilities such as:",
-        options:["Coding and web development exclusively","Communication, adaptability, and creative problem-solving","Only spreadsheet formulas","Server maintenance"], correct:1 },
-      { value:300, q:"The digital marketing ecosystem refers to:",
-        options:["A single isolated marketing channel with no interaction with others","Only a company's website","The interconnected network of channels, platforms, and tools (SEO, social, email, paid ads, etc.) that work together in a marketing strategy","A company's physical retail locations only"], correct:2 },
-      { value:400, q:"Email marketing remains a valuable digital channel because it allows companies to:",
-        options:["Reach only anonymous, untargeted audiences","Avoid any measurement of open or click rates","Communicate exclusively through physical mail","Send personalized, targeted messages directly to an interested subscriber base"], correct:3 },
-      { value:500, q:"The 'bottom line' takeaway about digital marketing skills is generally that successful digital marketers need:",
-        options:["A combination of both technical (hard) skills and interpersonal (soft) skills","Only technical skills, with no need for communication ability","Only creative skills, with no need for data or analytics knowledge","No specific skill set at all"], correct:0 }
-    ]
-  }
-];
-
-let score = 0;
-const usedSet = new Set();
-let currentKey = null;
-
-function rebuildGrid(){
-  const board = document.getElementById('board');
-  board.style.gridTemplateRows = 'auto repeat(5, 1fr)';
-  board.innerHTML = '';
-  DATA.forEach((cat)=>{
-    const header = document.createElement('div');
-    header.className = 'cat-header';
-    header.textContent = cat.category;
-    board.appendChild(header);
-  });
-  for(let row=0; row<5; row++){
-    DATA.forEach((cat, ci)=>{
-      const q = cat.questions[row];
-      const key = ci + '-' + row;
-      const cell = document.createElement('div');
-      cell.className = 'cell' + (usedSet.has(key) ? ' used' : '');
-      cell.textContent = '$' + q.value;
-      if(!usedSet.has(key)){
-        cell.addEventListener('click', () => openModal(ci, row));
-      }
-      board.appendChild(cell);
-    });
-  }
-  document.getElementById('scoreValue').textContent = (score < 0 ? '-$' + Math.abs(score) : '$' + score);
-  document.getElementById('scoreboard').classList.toggle('negative', score < 0);
+window.JEOPARDY = {
+  boardId: "week8",
+  eyebrow: "Week 8 · Strategic Marketing Plan",
+  title: "Strategic Marketing Plan Jeopardy",
+  subtitle: "Integrated marketing communications, promotion mix, customer metrics, and digital marketing channels",
+  data: [
+{
+category: "Integrated Marketing Communications",
+questions: [
+{ value:100, q:"Integrated marketing communications (IMC) is best defined as:",
+options:["A company's internal accounting process","Setting prices independently of any promotional strategy","Using only one promotional tool at a time","Coordinating all promotional tools so they deliver a clear, consistent, and compelling message about an organization and its products"], k:"hJX_Xb2EIm1gighLCs6bD7" },
+{ value:200, q:"The main goal of IMC is to:",
+options:["Eliminate the need for advertising","Focus exclusively on personal selling","Ensure all communication channels work together to reinforce a unified brand message","Confuse customers with mixed brand messages"], k:"RnHpAQRZ6xrBf7v_KqDxeq" },
+{ value:300, q:"Which of the following is typically part of the promotion mix coordinated under IMC?",
+options:["Only pricing strategy","Only product packaging","Only distribution channels","Advertising, sales promotion, public relations, personal selling, and direct marketing"], k:"TrU73JcpGfR637IO8Ydo9X" },
+{ value:400, q:"A key challenge of implementing IMC is:",
+options:["It has no impact on brand perception","Coordinating multiple departments and agencies to deliver one consistent message","It never needs cross-department coordination","It requires using only a single communication channel"], k:"7CSdwp45Rat7ehki0kjf26" },
+{ value:500, q:"IMC is important because inconsistent messaging across channels can:",
+options:["Guarantee higher customer loyalty","Have no effect on customer perception","Always increase sales regardless of message clarity","Confuse customers and weaken brand image"], k:"LBeuIngRI4cGONwJmUTbTn" }
+]
+},
+{
+category: "Advertising, Promotion, PR & Personal Selling",
+questions: [
+{ value:100, q:"Personal selling is best described as:",
+options:["Free media coverage of a company","Direct, personal presentation by a company's sales force to make sales and build customer relationships","A short-term discount offered at checkout","Mass, non-personal communication through paid media"], k:"kWe41kTXoXFTkvENGhV5TP" },
+{ value:200, q:"Sales management involves:",
+options:["Planning, directing, and controlling personal selling activities, including recruiting, training, and motivating a sales force","Managing a company's supply chain","Setting product prices exclusively","Only creating television advertisements"], k:"xdOOlDVwgVG2vMa_jSoNKp" },
+{ value:300, q:"A sales promotion such as a limited-time discount is designed to:",
+options:["Stimulate quicker or greater purchase of a product","Replace the need for a sales force entirely","Build long-term brand image exclusively","Generate free publicity only"], k:"Srn1Z9b-t2SDn90lryCp34" },
+{ value:400, q:"Public relations activities such as press releases and events are used to:",
+options:["Build and maintain a favorable public image for the organization","Directly close individual sales","Manage a company's inventory levels","Set retail prices"], k:"orgYqtabwyWsukm7FQcb72" },
+{ value:500, q:"Compared to advertising, personal selling generally offers:",
+options:["More opportunity for direct, personalized interaction and immediate feedback","A completely non-personal customer experience","No ability to tailor a message to an individual customer","Lower cost per customer contact for mass audiences"], k:"WrYNVfg6Zxe2NWYiKmv71l" }
+]
+},
+{
+category: "Customer Metrics",
+questions: [
+{ value:100, q:"Customer churn refers to:",
+options:["A company's total revenue","The rate at which customers stop doing business with a company over a given period","The average price customers pay for a product","The number of new customers acquired each month"], k:"0qNzOKRWGhbMWh0KKgOPwy" },
+{ value:200, q:"Expansion revenue refers to revenue generated from:",
+options:["Refunds issued to unhappy customers","Existing customers who upgrade, purchase additional products, or expand their usage","One-time discounted sales","Brand-new customers only"], k:"y_K8Dn1qmoC60ca9g9Fh7E" },
+{ value:300, q:"Net Promoter Score (NPS) is a metric used to measure:",
+options:["The number of employees in the marketing department","Customer loyalty and the likelihood that customers will recommend a company to others","A company's total annual profit","Website loading speed"], k:"nWc91T96n9IggtJ0On8dUt" },
+{ value:400, q:"A high customer churn rate typically signals that a company should:",
+options:["Ignore the issue since churn has no business impact","Investigate causes of dissatisfaction and improve retention efforts","Stop measuring customer satisfaction altogether","Immediately raise prices for all customers"], k:"Ayq2YRM-xiwNq-4VIxUrb1" },
+{ value:500, q:"Tracking customer satisfaction over time helps a company:",
+options:["Eliminate the need for customer feedback","Avoid ever changing its products or services","Set employee salaries","Identify trends and address problems before they lead to increased churn"], k:"abL4-3tfJjHZlftrOG5xM7" }
+]
+},
+{
+category: "Digital Marketing Channels & Techniques",
+questions: [
+{ value:100, q:"Search engine optimization (SEO) involves:",
+options:["Sending unsolicited emails to random addresses","Paying for every single website visitor","Placing ads exclusively on social media","Improving a website's visibility in organic (unpaid) search engine results"], k:"jRR-tF7qHGMZUJMLEWL97m" },
+{ value:200, q:"Pay-per-click (PPC) advertising is a model in which advertisers:",
+options:["Pay a flat fee regardless of ad performance","Only pay for print advertisements","Never pay for advertising placement","Pay a fee each time a user clicks on one of their ads"], k:"BqQWQDHdOVLkN1IaqZws2P" },
+{ value:300, q:"One noted advantage of digital display advertising is that it:",
+options:["Can use visually engaging formats to build brand awareness across many websites","Is always more effective than search advertising","Requires no design or creative work","Cannot be targeted to specific audiences"], k:"JiXFVNQiUo1vaRatd58DJm" },
+{ value:400, q:"One noted disadvantage of digital display advertising is:",
+options:["It only works for physical retail businesses","Banner blindness, where users learn to ignore display ads, reducing effectiveness","It cannot include images or graphics","It is impossible to measure performance"], k:"YZjU4JYlR3oWiHVg_3TxAB" },
+{ value:500, q:"Mobile marketing refers to marketing activities that:",
+options:["Ignore consumers' use of smartphones","Are limited exclusively to print media","Reach consumers through smartphones and other mobile devices, such as via apps, SMS, or mobile-optimized ads","Only occur through desktop computers"], k:"PvsVpfBUc6TIwlw1wJacMI" }
+]
+},
+{
+category: "Digital Marketing Skills & Ecosystem",
+questions: [
+{ value:100, q:"Hard skills in digital marketing typically include:",
+options:["Technical abilities such as SEO, analytics tools, and paid advertising platform management","Only interpersonal communication skills","Only creativity with no technical component","Physical strength and manual labor skills"], k:"88QuvyN2_lj1-B-DORL_OI" },
+{ value:200, q:"Soft skills in digital marketing include abilities such as:",
+options:["Coding and web development exclusively","Only spreadsheet formulas","Communication, adaptability, and creative problem-solving","Server maintenance"], k:"91ceS-1bmcFfdg-mmGk0QR" },
+{ value:300, q:"The digital marketing ecosystem refers to:",
+options:["A company's physical retail locations only","A single isolated marketing channel with no interaction with others","Only a company's website","The interconnected network of channels, platforms, and tools (SEO, social, email, paid ads, etc.) that work together in a marketing strategy"], k:"jlxO-kmGEKKB5VkHHLnINF" },
+{ value:400, q:"Email marketing remains a valuable digital channel because it allows companies to:",
+options:["Communicate exclusively through physical mail","Avoid any measurement of open or click rates","Reach only anonymous, untargeted audiences","Send personalized, targeted messages directly to an interested subscriber base"], k:"8CkeMqzuDD56u9F2c_Mvlx" },
+{ value:500, q:"The 'bottom line' takeaway about digital marketing skills is generally that successful digital marketers need:",
+options:["Only creative skills, with no need for data or analytics knowledge","Only technical skills, with no need for communication ability","A combination of both technical (hard) skills and interpersonal (soft) skills","No specific skill set at all"], k:"nFiUyvxxr0U_DCA2sF8T7m" }
+]
 }
-
-function openModal(ci, qi){
-  const cat = DATA[ci];
-  const q = cat.questions[qi];
-  currentKey = ci + '-' + qi;
-
-  document.getElementById('modalCat').textContent = cat.category;
-  document.getElementById('modalValue').textContent = '$' + q.value;
-  document.getElementById('modalQuestion').textContent = q.q;
-  document.getElementById('modalFeedback').textContent = '';
-  document.getElementById('modalFeedback').className = 'feedback';
-  document.getElementById('closeBtn').disabled = true;
-
-  const choicesEl = document.getElementById('modalChoices');
-  choicesEl.innerHTML = '';
-  const letters = ['A','B','C','D'];
-  q.options.forEach((opt, idx) => {
-    const div = document.createElement('div');
-    div.className = 'choice';
-    div.innerHTML = '<span class="letter">' + letters[idx] + '</span>' + opt;
-    div.addEventListener('click', () => selectAnswer(idx, q, div, choicesEl));
-    choicesEl.appendChild(div);
-  });
-
-  document.getElementById('overlay').classList.add('open');
-}
-
-function selectAnswer(idx, q, el, container){
-  Array.from(container.children).forEach(c => c.classList.add('locked'));
-  const feedback = document.getElementById('modalFeedback');
-
-  if(idx === q.correct){
-    el.classList.add('correct');
-    score += q.value;
-    feedback.textContent = 'Correct! +$' + q.value;
-    feedback.className = 'feedback correct-text';
-  } else {
-    el.classList.add('wrong');
-    Array.from(container.children)[q.correct].classList.add('correct');
-    score -= q.value;
-    feedback.textContent = 'Not quite. -$' + q.value;
-    feedback.className = 'feedback wrong-text';
-  }
-  usedSet.add(currentKey);
-  document.getElementById('closeBtn').disabled = false;
-}
-
-document.getElementById('closeBtn').addEventListener('click', () => {
-  document.getElementById('overlay').classList.remove('open');
-  rebuildGrid();
-});
-
-document.getElementById('resetBtn').addEventListener('click', () => {
-  score = 0;
-  usedSet.clear();
-  rebuildGrid();
-});
-
-rebuildGrid();
+]
+};
 </script>
-
+<script src="assets/jeopardy.js"></script>
 </body>
 </html>

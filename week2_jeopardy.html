@@ -4,474 +4,94 @@
 <meta charset="UTF-8">
 <title>Strategic Planning & Marketing Environment Jeopardy</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  :root{
-    --ink:#0B1F3D;
-    --ink-2:#12294f;
-    --paper:#F6F4EE;
-    --gold:#D4AF37;
-    --gold-dim:#a9872c;
-    --teal:#2EC4B6;
-    --coral:#FF6B6B;
-    --grid-line: rgba(212,175,55,0.10);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    background:
-      linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
-      radial-gradient(ellipse at top, var(--ink-2), var(--ink) 70%);
-    font-family: 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif;
-    color: var(--paper);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding: 28px 16px 60px;
-  }
-  header{
-    text-align:center;
-    margin-bottom: 22px;
-  }
-  .eyebrow{
-    letter-spacing: 4px;
-    font-size: 12px;
-    color: var(--teal);
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  h1{
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(26px, 4.6vw, 44px);
-    margin: 0;
-    color: var(--gold);
-    text-shadow: 0 2px 0 rgba(0,0,0,0.35);
-    letter-spacing: 1px;
-  }
-  .subtitle{
-    margin-top: 8px;
-    font-size: 14px;
-    color: rgba(246,244,238,0.65);
-  }
-
-  .scoreboard{
-    display:flex;
-    gap:14px;
-    align-items:center;
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 999px;
-    padding: 10px 22px;
-    margin-bottom: 26px;
-    font-variant-numeric: tabular-nums;
-  }
-  .scoreboard .label{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    color: rgba(246,244,238,0.6);
-  }
-  .scoreboard .value{
-    font-size: 26px;
-    font-weight:700;
-    color: var(--gold);
-    min-width: 70px;
-    text-align:center;
-  }
-  .scoreboard.negative .value{ color: var(--coral); }
-
-  .board{
-    width: 100%;
-    max-width: 1200px;
-    display:grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    background: rgba(0,0,0,0.2);
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(212,175,55,0.25);
-  }
-  .cat-header{
-    background: linear-gradient(180deg, #0f2a52, #0a1c3a);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 6px;
-    padding: 14px 8px;
-    text-align:center;
-    font-weight:700;
-    font-size: clamp(11px, 1.3vw, 14px);
-    text-transform:uppercase;
-    letter-spacing: 0.5px;
-    color: var(--paper);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height: 68px;
-    line-height:1.25;
-  }
-  .cell{
-    background: linear-gradient(180deg, #123063, #0b1f3f);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 6px;
-    padding: 18px 6px;
-    text-align:center;
-    font-family: Georgia, serif;
-    font-weight:700;
-    font-size: clamp(18px, 2.6vw, 26px);
-    color: var(--gold);
-    cursor:pointer;
-    transition: transform .12s ease, background .12s ease;
-    user-select:none;
-  }
-  .cell:hover:not(.used){
-    transform: translateY(-2px);
-    background: linear-gradient(180deg, #16407f, #0d234a);
-  }
-  .cell.used{
-    color: rgba(212,175,55,0.22);
-    cursor: default;
-    background: rgba(0,0,0,0.25);
-  }
-  .cell.used::after{
-    content: "✓";
-    display:block;
-    font-size: 14px;
-    margin-top: 4px;
-    color: rgba(46,196,182,0.4);
-  }
-
-  footer{
-    margin-top: 34px;
-    font-size: 12px;
-    color: rgba(246,244,238,0.4);
-    text-align:center;
-  }
-
-  /* Modal */
-  .overlay{
-    position: fixed; inset:0;
-    background: rgba(4,10,22,0.85);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding: 20px;
-    z-index: 50;
-  }
-  .overlay.open{ display:flex; }
-  .modal{
-    background: linear-gradient(180deg, #123063, #0a1c3a);
-    border: 1px solid rgba(212,175,55,0.4);
-    border-radius: 12px;
-    max-width: 720px;
-    width:100%;
-    padding: 34px 30px 26px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    text-align:center;
-  }
-  .modal .tag{
-    color: var(--teal);
-    font-size: 12px;
-    text-transform:uppercase;
-    letter-spacing:3px;
-    font-weight:700;
-    margin-bottom: 10px;
-  }
-  .modal .value-tag{
-    color: var(--gold);
-    font-size:14px;
-    font-weight:700;
-    margin-bottom: 18px;
-  }
-  .modal .question{
-    font-family: Georgia, serif;
-    font-size: clamp(18px, 2.6vw, 24px);
-    line-height:1.45;
-    margin-bottom: 26px;
-    color: var(--paper);
-  }
-  .choices{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  @media (max-width:520px){ .choices{ grid-template-columns: 1fr; } }
-  .choice{
-    background: rgba(246,244,238,0.06);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 8px;
-    padding: 14px 12px;
-    color: var(--paper);
-    font-size: 15px;
-    text-align:left;
-    cursor:pointer;
-    transition: background .12s ease, border-color .12s ease;
-  }
-  .choice:hover:not(.locked){
-    background: rgba(212,175,55,0.14);
-    border-color: var(--gold);
-  }
-  .choice .letter{
-    display:inline-block;
-    width: 22px;
-    height:22px;
-    line-height:22px;
-    border-radius:50%;
-    background: rgba(212,175,55,0.25);
-    color: var(--gold);
-    font-weight:700;
-    font-size: 12px;
-    margin-right: 10px;
-    text-align:center;
-  }
-  .choice.correct{
-    background: rgba(46,196,182,0.22);
-    border-color: var(--teal);
-  }
-  .choice.wrong{
-    background: rgba(255,107,107,0.2);
-    border-color: var(--coral);
-  }
-  .feedback{
-    min-height: 22px;
-    font-weight:700;
-    margin-bottom: 14px;
-  }
-  .feedback.correct-text{ color: var(--teal); }
-  .feedback.wrong-text{ color: var(--coral); }
-
-  .close-btn{
-    background: var(--gold);
-    color: var(--ink);
-    border:none;
-    padding: 10px 26px;
-    border-radius: 999px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:14px;
-    letter-spacing: 0.5px;
-  }
-  .close-btn:hover{ background:#e8c765; }
-  .close-btn:disabled{
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-
-  .reset-btn{
-    margin-top: 4px;
-    background: transparent;
-    color: rgba(246,244,238,0.55);
-    border: 1px solid rgba(246,244,238,0.25);
-    padding: 8px 18px;
-    border-radius: 999px;
-    font-size: 12px;
-    cursor:pointer;
-  }
-  .reset-btn:hover{
-    color: var(--paper);
-    border-color: var(--gold);
-  }
-</style>
+<link rel="stylesheet" href="assets/jeopardy.css">
 </head>
 <body>
-
-<header>
-  <div class="eyebrow">Week 2 · Strategic Planning & the Marketing Environment</div>
-  <h1>Strategic Planning Jeopardy</h1>
-  <div class="subtitle">Planning process, marketing plans, the marketing environment, analysis tools, and STP</div>
-</header>
-
-<div class="scoreboard" id="scoreboard">
-  <span class="label">Score</span>
-  <span class="value" id="scoreValue">$0</span>
-  <button class="reset-btn" id="resetBtn">Reset Game</button>
-</div>
-
-<div class="board" id="board"></div>
-
-<footer>Click a dollar value to open the clue. Answers are locked in once selected.</footer>
-
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="tag" id="modalCat">Category</div>
-    <div class="value-tag" id="modalValue">$100</div>
-    <div class="question" id="modalQuestion">Question text</div>
-    <div class="choices" id="modalChoices"></div>
-    <div class="feedback" id="modalFeedback"></div>
-    <button class="close-btn" id="closeBtn" disabled>Close</button>
-  </div>
-</div>
-
 <script>
-const DATA = [
-  {
-    category: "Strategic Planning Fundamentals",
-    questions: [
-      { value:100, q:"The strategic planning process begins with:",
-        options:["Defining the company's mission","Launching a new advertising campaign","Setting the annual sales quota","Hiring a new sales team"], correct:0 },
-      { value:200, q:"A company's mission statement is best described as:",
-        options:["A short-term sales forecast","A broad statement of the organization's purpose and what it aims to accomplish in its environment","A detailed list of daily employee tasks","The company's tax filing status"], correct:1 },
-      { value:300, q:"Strategic objectives should be:",
-        options:["Vague and open to any interpretation","Set without any timeframe","Specific, measurable, and tied to the company's mission","Kept secret from all employees"], correct:2 },
-      { value:400, q:"In the planning process, after setting objectives, a company typically:",
-        options:["Immediately dissolves the planning team","Skips directly to filing annual reports","Ignores the external environment","Develops strategies and a plan to achieve those objectives"], correct:3 },
-      { value:500, q:"Strategic planning is best defined as:",
-        options:["The process of developing and maintaining a fit between an organization's objectives and resources and its changing market opportunities","A one-time event conducted only when a company is founded","A purely financial exercise unrelated to marketing","A plan that never needs to be revisited"], correct:0 }
-    ]
-  },
-  {
-    category: "Marketing Plan Elements & Implementation",
-    questions: [
-      { value:100, q:"A marketing plan typically includes:",
-        options:["Only the company's org chart","An executive summary, situation analysis, objectives, strategies, and budgets","Only a list of employee names","A single paragraph with no supporting detail"], correct:1 },
-      { value:200, q:"The 'situation analysis' section of a marketing plan:",
-        options:["Lists only future goals with no current data","Focuses solely on employee benefits","Reviews the current marketing situation, including the market, product, and competition","Is written after the plan has already been implemented"], correct:2 },
-      { value:300, q:"Marketing plan objectives should ideally be:",
-        options:["Impossible to measure","Left undefined until the plan is complete","Based only on competitor guesses","Clear, specific, and achievable within a defined time period"], correct:3 },
-      { value:400, q:"Implementation, in the context of a marketing plan, refers to:",
-        options:["The process of turning marketing strategies and plans into actions to accomplish objectives","Writing the mission statement only","Canceling the marketing plan","A step that occurs before objectives are set"], correct:0 },
-      { value:500, q:"One key challenge of implementation is:",
-        options:["Plans always implement themselves without management involvement","Coordinating people, resources, and processes so the plan is carried out as intended","There is never a need to monitor results","Implementation has no connection to the original strategy"], correct:1 }
-    ]
-  },
-  {
-    category: "The Marketing Environment",
-    questions: [
-      { value:100, q:"The marketing environment consists of:",
-        options:["Only the company's internal departments","Only the finance department's records","The actors and forces outside marketing that affect a company's ability to build relationships with customers","A single competitor's product line"], correct:2 },
-      { value:200, q:"The microenvironment includes forces such as:",
-        options:["National interest rates","Global political events","Broad cultural shifts in society","The company itself, suppliers, marketing intermediaries, customers, and competitors"], correct:3 },
-      { value:300, q:"The macroenvironment includes broader forces such as:",
-        options:["Demographic, economic, technological, political, and cultural forces","Only the company's suppliers","Only the sales department","A single customer's complaint"], correct:0 },
-      { value:400, q:"Demographic changes, such as an aging population, are important to marketers because they:",
-        options:["Have no effect on consumer demand","Can significantly shift demand for products and services over time","Only matter to government agencies","Cannot be measured or tracked"], correct:1 },
-      { value:500, q:"Marketing intermediaries in the microenvironment include organizations such as:",
-        options:["National regulatory agencies only","Foreign governments","Resellers, distributors, and marketing service agencies that help promote and sell a company's products","Competing companies only"], correct:2 }
-    ]
-  },
-  {
-    category: "Market Analysis Tools",
-    questions: [
-      { value:100, q:"A SWOT analysis is used to evaluate:",
-        options:["Only a company's financial statements","Only employee morale","Only advertising effectiveness","A company's Strengths, Weaknesses, Opportunities, and Threats"], correct:3 },
-      { value:200, q:"Environmental scanning is the process of:",
-        options:["Continuously gathering information about forces in the marketing environment to identify trends and issues","Reviewing only last year's sales figures","Designing a company's product packaging","Setting employee work schedules"], correct:0 },
-      { value:300, q:"The BCG growth-share matrix classifies business units based on:",
-        options:["Employee headcount and office location","Relative market share and market growth rate","Advertising spend and logo design","Customer service ratings only"], correct:1 },
-      { value:400, q:"Porter's Five Forces model helps a company analyze:",
-        options:["Internal employee satisfaction only","The company's mission statement","The competitive intensity and attractiveness of an industry","A single customer's purchase history"], correct:2 },
-      { value:500, q:"A key benefit of using market analysis tools like SWOT and Porter's Five Forces is that they:",
-        options:["Guarantee a company's success regardless of execution","Replace the need for a marketing plan entirely","Are only useful for very small businesses","Provide a structured way to assess internal and external factors before making strategic decisions"], correct:3 }
-    ]
-  },
-  {
-    category: "Segmentation, Targeting & Positioning",
-    questions: [
-      { value:100, q:"Market segmentation involves:",
-        options:["Dividing a broad market into smaller groups of buyers with distinct needs or characteristics","Treating every customer exactly the same","Reducing a company's total product offerings to one","Merging with a competing company"], correct:0 },
-      { value:200, q:"Target marketing is the process of:",
-        options:["Ignoring market research entirely","Evaluating market segments and selecting one or more to enter","Selling to every possible customer in every market","Setting a single fixed price for all products"], correct:1 },
-      { value:300, q:"Positioning refers to:",
-        options:["The geographic location of a company's headquarters","The order in which products are manufactured","Arranging for a product to occupy a clear, distinctive place relative to competing products in the minds of target consumers","The shipping method used for online orders"], correct:2 },
-      { value:400, q:"A perceptual (positioning) map is used to:",
-        options:["Track a company's quarterly revenue","Record employee attendance","Show a company's supply chain routes","Visually display consumer perceptions of brands relative to competitors on key attributes"], correct:3 },
-      { value:500, q:"Effective market segments should be measurable, accessible, substantial, and:",
-        options:["Differentiable and actionable, meaning segments respond differently to marketing efforts","Identical to every other segment","Impossible to reach with marketing communications","Based only on employee opinions"], correct:0 }
-    ]
-  }
-];
-
-let score = 0;
-const usedSet = new Set();
-let currentKey = null;
-
-function rebuildGrid(){
-  const board = document.getElementById('board');
-  board.style.gridTemplateRows = 'auto repeat(5, 1fr)';
-  board.innerHTML = '';
-  DATA.forEach((cat)=>{
-    const header = document.createElement('div');
-    header.className = 'cat-header';
-    header.textContent = cat.category;
-    board.appendChild(header);
-  });
-  for(let row=0; row<5; row++){
-    DATA.forEach((cat, ci)=>{
-      const q = cat.questions[row];
-      const key = ci + '-' + row;
-      const cell = document.createElement('div');
-      cell.className = 'cell' + (usedSet.has(key) ? ' used' : '');
-      cell.textContent = '$' + q.value;
-      if(!usedSet.has(key)){
-        cell.addEventListener('click', () => openModal(ci, row));
-      }
-      board.appendChild(cell);
-    });
-  }
-  document.getElementById('scoreValue').textContent = (score < 0 ? '-$' + Math.abs(score) : '$' + score);
-  document.getElementById('scoreboard').classList.toggle('negative', score < 0);
+window.JEOPARDY = {
+  boardId: "week2",
+  eyebrow: "Week 2 · Strategic Planning & the Marketing Environment",
+  title: "Strategic Planning Jeopardy",
+  subtitle: "Planning process, marketing plans, the marketing environment, analysis tools, and STP",
+  data: [
+{
+category: "Strategic Planning Fundamentals",
+questions: [
+{ value:100, q:"The strategic planning process begins with:",
+options:["Launching a new advertising campaign","Setting the annual sales quota","Defining the company's mission","Hiring a new sales team"], k:"Vcu1NkCW5YAGXJSehCNW4y" },
+{ value:200, q:"A company's mission statement is best described as:",
+options:["The company's tax filing status","A detailed list of daily employee tasks","A short-term sales forecast","A broad statement of the organization's purpose and what it aims to accomplish in its environment"], k:"Yn41jsllC1A-I9CSZ4FbAz" },
+{ value:300, q:"Strategic objectives should be:",
+options:["Specific, measurable, and tied to the company's mission","Vague and open to any interpretation","Kept secret from all employees","Set without any timeframe"], k:"-T6kYdPI7JcerjK5KoIZyG" },
+{ value:400, q:"In the planning process, after setting objectives, a company typically:",
+options:["Develops strategies and a plan to achieve those objectives","Skips directly to filing annual reports","Immediately dissolves the planning team","Ignores the external environment"], k:"gNzQXl-JVKjsSexGalqT_4" },
+{ value:500, q:"Strategic planning is best defined as:",
+options:["The process of developing and maintaining a fit between an organization's objectives and resources and its changing market opportunities","A purely financial exercise unrelated to marketing","A plan that never needs to be revisited","A one-time event conducted only when a company is founded"], k:"f26hYrUCJCim-gwBYFnm1g" }
+]
+},
+{
+category: "Marketing Plan Elements & Implementation",
+questions: [
+{ value:100, q:"A marketing plan typically includes:",
+options:["Only a list of employee names","A single paragraph with no supporting detail","Only the company's org chart","An executive summary, situation analysis, objectives, strategies, and budgets"], k:"lou0-__y2pt_y6eP35VUpl" },
+{ value:200, q:"The 'situation analysis' section of a marketing plan:",
+options:["Reviews the current marketing situation, including the market, product, and competition","Focuses solely on employee benefits","Is written after the plan has already been implemented","Lists only future goals with no current data"], k:"8i5_KjCU2ZTsXLEhHHERoD" },
+{ value:300, q:"Marketing plan objectives should ideally be:",
+options:["Clear, specific, and achievable within a defined time period","Impossible to measure","Based only on competitor guesses","Left undefined until the plan is complete"], k:"he7lYMjpYQhdBDlx7tii8N" },
+{ value:400, q:"Implementation, in the context of a marketing plan, refers to:",
+options:["The process of turning marketing strategies and plans into actions to accomplish objectives","Writing the mission statement only","A step that occurs before objectives are set","Canceling the marketing plan"], k:"--eaIrb9XJfPXC7RXY7flx" },
+{ value:500, q:"One key challenge of implementation is:",
+options:["Coordinating people, resources, and processes so the plan is carried out as intended","Implementation has no connection to the original strategy","There is never a need to monitor results","Plans always implement themselves without management involvement"], k:"9DojU68fbLEypui-Naj9VP" }
+]
+},
+{
+category: "The Marketing Environment",
+questions: [
+{ value:100, q:"The marketing environment consists of:",
+options:["A single competitor's product line","Only the company's internal departments","The actors and forces outside marketing that affect a company's ability to build relationships with customers","Only the finance department's records"], k:"DGy82E_O8gUkET9APmPfXm" },
+{ value:200, q:"The microenvironment includes forces such as:",
+options:["The company itself, suppliers, marketing intermediaries, customers, and competitors","Broad cultural shifts in society","Global political events","National interest rates"], k:"Yvef0LEeaHSc14KhbDkWSP" },
+{ value:300, q:"The macroenvironment includes broader forces such as:",
+options:["Only the sales department","Demographic, economic, technological, political, and cultural forces","A single customer's complaint","Only the company's suppliers"], k:"5AQDo6Y7T_pO4dmigg5xYj" },
+{ value:400, q:"Demographic changes, such as an aging population, are important to marketers because they:",
+options:["Only matter to government agencies","Can significantly shift demand for products and services over time","Cannot be measured or tracked","Have no effect on consumer demand"], k:"sTX5G5te9GKSMid46iR1kC" },
+{ value:500, q:"Marketing intermediaries in the microenvironment include organizations such as:",
+options:["National regulatory agencies only","Foreign governments","Competing companies only","Resellers, distributors, and marketing service agencies that help promote and sell a company's products"], k:"WiwnMbro1Rma8SH_SX0SrM" }
+]
+},
+{
+category: "Market Analysis Tools",
+questions: [
+{ value:100, q:"A SWOT analysis is used to evaluate:",
+options:["Only a company's financial statements","A company's Strengths, Weaknesses, Opportunities, and Threats","Only employee morale","Only advertising effectiveness"], k:"6o7pZ8M15fbO6vgcu6LglT" },
+{ value:200, q:"Environmental scanning is the process of:",
+options:["Continuously gathering information about forces in the marketing environment to identify trends and issues","Setting employee work schedules","Reviewing only last year's sales figures","Designing a company's product packaging"], k:"bdpoMu5LZ08PbGFBZG75kZ" },
+{ value:300, q:"The BCG growth-share matrix classifies business units based on:",
+options:["Advertising spend and logo design","Relative market share and market growth rate","Customer service ratings only","Employee headcount and office location"], k:"kVeIxHBBqRE6b2UWqSHJWN" },
+{ value:400, q:"Porter's Five Forces model helps a company analyze:",
+options:["Internal employee satisfaction only","A single customer's purchase history","The company's mission statement","The competitive intensity and attractiveness of an industry"], k:"1bMHSflfuQJroc78ivVKP_" },
+{ value:500, q:"A key benefit of using market analysis tools like SWOT and Porter's Five Forces is that they:",
+options:["Are only useful for very small businesses","Provide a structured way to assess internal and external factors before making strategic decisions","Replace the need for a marketing plan entirely","Guarantee a company's success regardless of execution"], k:"zIjZ61gg_JRXBogVXMmkgd" }
+]
+},
+{
+category: "Segmentation, Targeting & Positioning",
+questions: [
+{ value:100, q:"Market segmentation involves:",
+options:["Reducing a company's total product offerings to one","Dividing a broad market into smaller groups of buyers with distinct needs or characteristics","Treating every customer exactly the same","Merging with a competing company"], k:"phTK_XGYx6IKwepGsDvp66" },
+{ value:200, q:"Target marketing is the process of:",
+options:["Setting a single fixed price for all products","Evaluating market segments and selecting one or more to enter","Ignoring market research entirely","Selling to every possible customer in every market"], k:"uMNQebGoPeZJ4mfEzng6Yd" },
+{ value:300, q:"Positioning refers to:",
+options:["The geographic location of a company's headquarters","The order in which products are manufactured","The shipping method used for online orders","Arranging for a product to occupy a clear, distinctive place relative to competing products in the minds of target consumers"], k:"saNz4m0IGF1t-kRWML9w7M" },
+{ value:400, q:"A perceptual (positioning) map is used to:",
+options:["Record employee attendance","Visually display consumer perceptions of brands relative to competitors on key attributes","Show a company's supply chain routes","Track a company's quarterly revenue"], k:"OJev0N0ez8cQID8m9ePbeb" },
+{ value:500, q:"Effective market segments should be measurable, accessible, substantial, and:",
+options:["Differentiable and actionable, meaning segments respond differently to marketing efforts","Identical to every other segment","Impossible to reach with marketing communications","Based only on employee opinions"], k:"_3G_aurVV9o-wXcbaoQSVs" }
+]
 }
-
-function openModal(ci, qi){
-  const cat = DATA[ci];
-  const q = cat.questions[qi];
-  currentKey = ci + '-' + qi;
-
-  document.getElementById('modalCat').textContent = cat.category;
-  document.getElementById('modalValue').textContent = '$' + q.value;
-  document.getElementById('modalQuestion').textContent = q.q;
-  document.getElementById('modalFeedback').textContent = '';
-  document.getElementById('modalFeedback').className = 'feedback';
-  document.getElementById('closeBtn').disabled = true;
-
-  const choicesEl = document.getElementById('modalChoices');
-  choicesEl.innerHTML = '';
-  const letters = ['A','B','C','D'];
-  q.options.forEach((opt, idx) => {
-    const div = document.createElement('div');
-    div.className = 'choice';
-    div.innerHTML = '<span class="letter">' + letters[idx] + '</span>' + opt;
-    div.addEventListener('click', () => selectAnswer(idx, q, div, choicesEl));
-    choicesEl.appendChild(div);
-  });
-
-  document.getElementById('overlay').classList.add('open');
-}
-
-function selectAnswer(idx, q, el, container){
-  Array.from(container.children).forEach(c => c.classList.add('locked'));
-  const feedback = document.getElementById('modalFeedback');
-
-  if(idx === q.correct){
-    el.classList.add('correct');
-    score += q.value;
-    feedback.textContent = 'Correct! +$' + q.value;
-    feedback.className = 'feedback correct-text';
-  } else {
-    el.classList.add('wrong');
-    Array.from(container.children)[q.correct].classList.add('correct');
-    score -= q.value;
-    feedback.textContent = 'Not quite. -$' + q.value;
-    feedback.className = 'feedback wrong-text';
-  }
-  usedSet.add(currentKey);
-  document.getElementById('closeBtn').disabled = false;
-}
-
-document.getElementById('closeBtn').addEventListener('click', () => {
-  document.getElementById('overlay').classList.remove('open');
-  rebuildGrid();
-});
-
-document.getElementById('resetBtn').addEventListener('click', () => {
-  score = 0;
-  usedSet.clear();
-  rebuildGrid();
-});
-
-rebuildGrid();
+]
+};
 </script>
-
+<script src="assets/jeopardy.js"></script>
 </body>
 </html>

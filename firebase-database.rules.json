@@ -1,0 +1,30 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "leaderboards": {
+      "$boardId": {
+        ".read": true,
+        "$entry": {
+          ".write": "!data.exists() && newData.exists()",
+          ".validate": "newData.hasChildren(['name','class','score'])",
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          },
+          "class": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          },
+          "score": {
+            ".validate": "newData.isNumber()"
+          },
+          "date": {
+            ".validate": "newData.isNumber()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    }
+  }
+}

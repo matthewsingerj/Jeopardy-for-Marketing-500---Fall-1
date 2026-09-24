@@ -4,474 +4,94 @@
 <meta charset="UTF-8">
 <title>Adaptive Marketing & Branding Jeopardy</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  :root{
-    --ink:#0B1F3D;
-    --ink-2:#12294f;
-    --paper:#F6F4EE;
-    --gold:#D4AF37;
-    --gold-dim:#a9872c;
-    --teal:#2EC4B6;
-    --coral:#FF6B6B;
-    --grid-line: rgba(212,175,55,0.10);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    background:
-      linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/40px 40px,
-      radial-gradient(ellipse at top, var(--ink-2), var(--ink) 70%);
-    font-family: 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif;
-    color: var(--paper);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding: 28px 16px 60px;
-  }
-  header{
-    text-align:center;
-    margin-bottom: 22px;
-  }
-  .eyebrow{
-    letter-spacing: 4px;
-    font-size: 12px;
-    color: var(--teal);
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  h1{
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(26px, 4.6vw, 44px);
-    margin: 0;
-    color: var(--gold);
-    text-shadow: 0 2px 0 rgba(0,0,0,0.35);
-    letter-spacing: 1px;
-  }
-  .subtitle{
-    margin-top: 8px;
-    font-size: 14px;
-    color: rgba(246,244,238,0.65);
-  }
-
-  .scoreboard{
-    display:flex;
-    gap:14px;
-    align-items:center;
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 999px;
-    padding: 10px 22px;
-    margin-bottom: 26px;
-    font-variant-numeric: tabular-nums;
-  }
-  .scoreboard .label{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    color: rgba(246,244,238,0.6);
-  }
-  .scoreboard .value{
-    font-size: 26px;
-    font-weight:700;
-    color: var(--gold);
-    min-width: 70px;
-    text-align:center;
-  }
-  .scoreboard.negative .value{ color: var(--coral); }
-
-  .board{
-    width: 100%;
-    max-width: 1200px;
-    display:grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    background: rgba(0,0,0,0.2);
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(212,175,55,0.25);
-  }
-  .cat-header{
-    background: linear-gradient(180deg, #0f2a52, #0a1c3a);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 6px;
-    padding: 14px 8px;
-    text-align:center;
-    font-weight:700;
-    font-size: clamp(11px, 1.3vw, 14px);
-    text-transform:uppercase;
-    letter-spacing: 0.5px;
-    color: var(--paper);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height: 68px;
-    line-height:1.25;
-  }
-  .cell{
-    background: linear-gradient(180deg, #123063, #0b1f3f);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 6px;
-    padding: 18px 6px;
-    text-align:center;
-    font-family: Georgia, serif;
-    font-weight:700;
-    font-size: clamp(18px, 2.6vw, 26px);
-    color: var(--gold);
-    cursor:pointer;
-    transition: transform .12s ease, background .12s ease;
-    user-select:none;
-  }
-  .cell:hover:not(.used){
-    transform: translateY(-2px);
-    background: linear-gradient(180deg, #16407f, #0d234a);
-  }
-  .cell.used{
-    color: rgba(212,175,55,0.22);
-    cursor: default;
-    background: rgba(0,0,0,0.25);
-  }
-  .cell.used::after{
-    content: "✓";
-    display:block;
-    font-size: 14px;
-    margin-top: 4px;
-    color: rgba(46,196,182,0.4);
-  }
-
-  footer{
-    margin-top: 34px;
-    font-size: 12px;
-    color: rgba(246,244,238,0.4);
-    text-align:center;
-  }
-
-  /* Modal */
-  .overlay{
-    position: fixed; inset:0;
-    background: rgba(4,10,22,0.85);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding: 20px;
-    z-index: 50;
-  }
-  .overlay.open{ display:flex; }
-  .modal{
-    background: linear-gradient(180deg, #123063, #0a1c3a);
-    border: 1px solid rgba(212,175,55,0.4);
-    border-radius: 12px;
-    max-width: 720px;
-    width:100%;
-    padding: 34px 30px 26px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    text-align:center;
-  }
-  .modal .tag{
-    color: var(--teal);
-    font-size: 12px;
-    text-transform:uppercase;
-    letter-spacing:3px;
-    font-weight:700;
-    margin-bottom: 10px;
-  }
-  .modal .value-tag{
-    color: var(--gold);
-    font-size:14px;
-    font-weight:700;
-    margin-bottom: 18px;
-  }
-  .modal .question{
-    font-family: Georgia, serif;
-    font-size: clamp(18px, 2.6vw, 24px);
-    line-height:1.45;
-    margin-bottom: 26px;
-    color: var(--paper);
-  }
-  .choices{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  @media (max-width:520px){ .choices{ grid-template-columns: 1fr; } }
-  .choice{
-    background: rgba(246,244,238,0.06);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 8px;
-    padding: 14px 12px;
-    color: var(--paper);
-    font-size: 15px;
-    text-align:left;
-    cursor:pointer;
-    transition: background .12s ease, border-color .12s ease;
-  }
-  .choice:hover:not(.locked){
-    background: rgba(212,175,55,0.14);
-    border-color: var(--gold);
-  }
-  .choice .letter{
-    display:inline-block;
-    width: 22px;
-    height:22px;
-    line-height:22px;
-    border-radius:50%;
-    background: rgba(212,175,55,0.25);
-    color: var(--gold);
-    font-weight:700;
-    font-size: 12px;
-    margin-right: 10px;
-    text-align:center;
-  }
-  .choice.correct{
-    background: rgba(46,196,182,0.22);
-    border-color: var(--teal);
-  }
-  .choice.wrong{
-    background: rgba(255,107,107,0.2);
-    border-color: var(--coral);
-  }
-  .feedback{
-    min-height: 22px;
-    font-weight:700;
-    margin-bottom: 14px;
-  }
-  .feedback.correct-text{ color: var(--teal); }
-  .feedback.wrong-text{ color: var(--coral); }
-
-  .close-btn{
-    background: var(--gold);
-    color: var(--ink);
-    border:none;
-    padding: 10px 26px;
-    border-radius: 999px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:14px;
-    letter-spacing: 0.5px;
-  }
-  .close-btn:hover{ background:#e8c765; }
-  .close-btn:disabled{
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-
-  .reset-btn{
-    margin-top: 4px;
-    background: transparent;
-    color: rgba(246,244,238,0.55);
-    border: 1px solid rgba(246,244,238,0.25);
-    padding: 8px 18px;
-    border-radius: 999px;
-    font-size: 12px;
-    cursor:pointer;
-  }
-  .reset-btn:hover{
-    color: var(--paper);
-    border-color: var(--gold);
-  }
-</style>
+<link rel="stylesheet" href="assets/jeopardy.css">
 </head>
 <body>
-
-<header>
-  <div class="eyebrow">Week 7 · Adaptive Marketing and Branding</div>
-  <h1>Adaptive Marketing Jeopardy</h1>
-  <div class="subtitle">Customer relationships, advertising &amp; PR, channel integration, digital marketing, and nimble organizations</div>
-</header>
-
-<div class="scoreboard" id="scoreboard">
-  <span class="label">Score</span>
-  <span class="value" id="scoreValue">$0</span>
-  <button class="reset-btn" id="resetBtn">Reset Game</button>
-</div>
-
-<div class="board" id="board"></div>
-
-<footer>Click a dollar value to open the clue. Answers are locked in once selected.</footer>
-
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="tag" id="modalCat">Category</div>
-    <div class="value-tag" id="modalValue">$100</div>
-    <div class="question" id="modalQuestion">Question text</div>
-    <div class="choices" id="modalChoices"></div>
-    <div class="feedback" id="modalFeedback"></div>
-    <button class="close-btn" id="closeBtn" disabled>Close</button>
-  </div>
-</div>
-
 <script>
-const DATA = [
-  {
-    category: "Customer Relationships & Internal Marketing",
-    questions: [
-      { value:100, q:"Customer value refers to:",
-        options:["The perceived benefits a customer receives from a product relative to its costs","Only the price a company charges","A company's profit margin","The number of units sold"], correct:0 },
-      { value:200, q:"Customer satisfaction is best defined as:",
-        options:["The total revenue generated by a customer","The extent to which a product's perceived performance matches a buyer's expectations","The number of complaints received","A company's advertising budget"], correct:1 },
-      { value:300, q:"Relationship marketing focuses on:",
-        options:["One-time transactions only","Ignoring long-term customer needs","Building long-term, mutually beneficial relationships with customers","Reducing customer contact to a minimum"], correct:2 },
-      { value:400, q:"Internal marketing refers to:",
-        options:["Marketing only to external suppliers","Advertising exclusively to competitors","A company's financial reporting process","Training and motivating employees to serve customers well, especially important in service businesses"], correct:3 },
-      { value:500, q:"Customer lifetime value estimates:",
-        options:["The total worth of a customer to a company over the entire length of the relationship","Only a single transaction's profit","A customer's age","The number of employees serving a customer"], correct:0 }
-    ]
-  },
-  {
-    category: "Advertising, Sales Promotion & PR",
-    questions: [
-      { value:100, q:"Advertising is best defined as:",
-        options:["Free coverage in the news media","Any paid form of non-personal presentation and promotion of ideas, goods, or services by an identified sponsor","A personal sales visit","A discount coupon given at checkout"], correct:1 },
-      { value:200, q:"Sales promotion refers to:",
-        options:["Long-term brand-building campaigns only","Personal, one-on-one communication with a customer","Short-term incentives to encourage the purchase of a product or service, such as coupons or contests","A company's annual report"], correct:2 },
-      { value:300, q:"Public relations (PR) primarily aims to:",
-        options:["Sell products directly to consumers","Only run paid television commercials","Set retail prices","Build good relationships with a company's various publics by obtaining favorable publicity and handling unfavorable rumors"], correct:3 },
-      { value:400, q:"Sponsorship as a promotional tool involves:",
-        options:["A company providing financial or in-kind support to an event or organization in exchange for brand exposure","Selling a company's assets to competitors","Randomly donating money with no marketing benefit","Reducing advertising spend to zero"], correct:0 },
-      { value:500, q:"Which of the following best distinguishes advertising from personal selling?",
-        options:["Advertising always costs less than personal selling","Advertising is non-personal and one-way, while personal selling involves direct, two-way interaction with a customer","Personal selling never has a cost","Advertising cannot be measured for effectiveness"], correct:1 }
-    ]
-  },
-  {
-    category: "Channel Management & Digital Integration",
-    questions: [
-      { value:100, q:"Channel strategy fundamentals involve:",
-        options:["Ignoring how a product reaches customers","Selling only through one method with no consideration of alternatives","Deciding how a company will make its products available to target customers, including which intermediaries to use","Setting the company's annual budget"], correct:2 },
-      { value:200, q:"Multichannel marketing refers to a company:",
-        options:["Using only a single distribution channel","Selling only in physical retail stores","Avoiding e-commerce entirely","Using two or more channels to reach one or more customer segments"], correct:3 },
-      { value:300, q:"Digital channel integration involves:",
-        options:["Coordinating online and offline channels so customers have a seamless brand experience","Keeping online and offline operations completely separate","Eliminating all physical retail locations","Only using email as a sales channel"], correct:0 },
-      { value:400, q:"An omnichannel approach differs from a simple multichannel approach because it:",
-        options:["Uses only one channel","Integrates all channels into a unified, consistent customer experience","Ignores customer data across channels","Focuses exclusively on in-store experiences"], correct:1 },
-      { value:500, q:"Agile distribution operations refer to a supply chain's ability to:",
-        options:["Follow a single fixed plan regardless of demand changes","Ignore disruptions in the supply chain","Quickly adapt to changes in demand, supply, or market conditions","Operate only through traditional retail channels"], correct:2 }
-    ]
-  },
-  {
-    category: "Digital Marketing Fundamentals",
-    questions: [
-      { value:100, q:"Digital marketing refers to:",
-        options:["Only print advertising","Traditional television commercials exclusively","Direct mail campaigns only","Marketing efforts that use electronic devices and the internet to connect with customers"], correct:3 },
-      { value:200, q:"Search engine marketing (SEM) involves:",
-        options:["Using paid search ads to increase visibility in search engine results","Only organic, unpaid website traffic","Sending physical mail to customers","In-store product displays"], correct:0 },
-      { value:300, q:"Content marketing focuses on:",
-        options:["Only paid banner advertisements","Creating and distributing valuable, relevant content to attract and engage a target audience","Cold-calling potential customers","Setting product prices"], correct:1 },
-      { value:400, q:"Social media marketing allows companies to:",
-        options:["Avoid any direct interaction with customers","Only broadcast one-way messages with no engagement","Engage directly with customers, build community, and gather real-time feedback","Eliminate the need for any other marketing channel"], correct:2 },
-      { value:500, q:"Email marketing remains effective because it:",
-        options:["Cannot be personalized","Is only useful for very large companies","Has no measurable performance metrics","Allows for personalized, targeted communication directly to interested customers"], correct:3 }
-    ]
-  },
-  {
-    category: "Nimble vs. Agile Organizations",
-    questions: [
-      { value:100, q:"According to research on nimble organizations, being 'nimble' refers to an organization's ability to:",
-        options:["Sense shifts in the market or internal dynamics and respond with speed and precision","Follow a single rigid annual plan with no changes","Avoid any use of technology","Focus solely on cost-cutting"], correct:0 },
-      { value:200, q:"According to The Brazilian BA's comparison, 'Agile' is best described as:",
-        options:["The ability to react quickly and efficiently to any situation","A specific approach that adds value through collaboration, flexibility, and iterative practices","A synonym with no meaningful difference from 'nimble'","A financial reporting standard"], correct:1 },
-      { value:300, q:"A company can implement agile methodologies and still not be considered 'nimble' because:",
-        options:["Nimble and agile always mean exactly the same thing","Agile methods automatically guarantee organizational nimbleness","Using agile practices does not guarantee the organization can actually sense and respond to change effectively","Nimble only applies to software development teams"], correct:2 },
-      { value:400, q:"One key characteristic of nimble organizations is:",
-        options:["Resistance to changing strategies once set","Centralized, slow decision-making processes","Avoiding adaptation to customer needs","Adaptability — the capacity to quickly adjust strategies, processes, and resources to changing circumstances"], correct:3 },
-      { value:500, q:"Applying nimbleness to marketing and distribution operations means a company should be able to:",
-        options:["Quickly adjust marketing channels and distribution approaches in response to shifting market conditions","Never revisit its marketing plan once launched","Only rely on traditional, unchanging distribution methods","Ignore customer feedback when making channel decisions"], correct:0 }
-    ]
-  }
-];
-
-let score = 0;
-const usedSet = new Set();
-let currentKey = null;
-
-function rebuildGrid(){
-  const board = document.getElementById('board');
-  board.style.gridTemplateRows = 'auto repeat(5, 1fr)';
-  board.innerHTML = '';
-  DATA.forEach((cat)=>{
-    const header = document.createElement('div');
-    header.className = 'cat-header';
-    header.textContent = cat.category;
-    board.appendChild(header);
-  });
-  for(let row=0; row<5; row++){
-    DATA.forEach((cat, ci)=>{
-      const q = cat.questions[row];
-      const key = ci + '-' + row;
-      const cell = document.createElement('div');
-      cell.className = 'cell' + (usedSet.has(key) ? ' used' : '');
-      cell.textContent = '$' + q.value;
-      if(!usedSet.has(key)){
-        cell.addEventListener('click', () => openModal(ci, row));
-      }
-      board.appendChild(cell);
-    });
-  }
-  document.getElementById('scoreValue').textContent = (score < 0 ? '-$' + Math.abs(score) : '$' + score);
-  document.getElementById('scoreboard').classList.toggle('negative', score < 0);
+window.JEOPARDY = {
+  boardId: "week7",
+  eyebrow: "Week 7 · Adaptive Marketing and Branding",
+  title: "Adaptive Marketing Jeopardy",
+  subtitle: "Customer relationships, advertising &amp; PR, channel integration, digital marketing, and nimble organizations",
+  data: [
+{
+category: "Customer Relationships & Internal Marketing",
+questions: [
+{ value:100, q:"Customer value refers to:",
+options:["The number of units sold","The perceived benefits a customer receives from a product relative to its costs","Only the price a company charges","A company's profit margin"], k:"R-lUXmMFYDbakyBEtAAqTw" },
+{ value:200, q:"Customer satisfaction is best defined as:",
+options:["A company's advertising budget","The total revenue generated by a customer","The number of complaints received","The extent to which a product's perceived performance matches a buyer's expectations"], k:"OdS8upKznIC2lNB2QiWx5l" },
+{ value:300, q:"Relationship marketing focuses on:",
+options:["Ignoring long-term customer needs","Building long-term, mutually beneficial relationships with customers","One-time transactions only","Reducing customer contact to a minimum"], k:"HgKXYtnoJPgbNSGjQL3M_U" },
+{ value:400, q:"Internal marketing refers to:",
+options:["A company's financial reporting process","Training and motivating employees to serve customers well, especially important in service businesses","Advertising exclusively to competitors","Marketing only to external suppliers"], k:"90LTF07CFnqePpWPRhK16s" },
+{ value:500, q:"Customer lifetime value estimates:",
+options:["The number of employees serving a customer","The total worth of a customer to a company over the entire length of the relationship","Only a single transaction's profit","A customer's age"], k:"yRcEoQsrmwohe1IlVgcXAb" }
+]
+},
+{
+category: "Advertising, Sales Promotion & PR",
+questions: [
+{ value:100, q:"Advertising is best defined as:",
+options:["Any paid form of non-personal presentation and promotion of ideas, goods, or services by an identified sponsor","A discount coupon given at checkout","A personal sales visit","Free coverage in the news media"], k:"z8vbJ8iJOG5kiF1msIAJU4" },
+{ value:200, q:"Sales promotion refers to:",
+options:["Personal, one-on-one communication with a customer","A company's annual report","Long-term brand-building campaigns only","Short-term incentives to encourage the purchase of a product or service, such as coupons or contests"], k:"lncm5dRQk3ElRbTJ9Ezixf" },
+{ value:300, q:"Public relations (PR) primarily aims to:",
+options:["Sell products directly to consumers","Only run paid television commercials","Set retail prices","Build good relationships with a company's various publics by obtaining favorable publicity and handling unfavorable rumors"], k:"4ZXBm0jLeKwafdQWTn8xdV" },
+{ value:400, q:"Sponsorship as a promotional tool involves:",
+options:["Reducing advertising spend to zero","A company providing financial or in-kind support to an event or organization in exchange for brand exposure","Selling a company's assets to competitors","Randomly donating money with no marketing benefit"], k:"AMCPQ4aRpfhJyuebxis2bE" },
+{ value:500, q:"Which of the following best distinguishes advertising from personal selling?",
+options:["Personal selling never has a cost","Advertising always costs less than personal selling","Advertising cannot be measured for effectiveness","Advertising is non-personal and one-way, while personal selling involves direct, two-way interaction with a customer"], k:"nKHoHr1kV2Tzu2zBpz02Pf" }
+]
+},
+{
+category: "Channel Management & Digital Integration",
+questions: [
+{ value:100, q:"Channel strategy fundamentals involve:",
+options:["Ignoring how a product reaches customers","Selling only through one method with no consideration of alternatives","Deciding how a company will make its products available to target customers, including which intermediaries to use","Setting the company's annual budget"], k:"5X9xVCkI3r2N9U-KtgXJAi" },
+{ value:200, q:"Multichannel marketing refers to a company:",
+options:["Using two or more channels to reach one or more customer segments","Avoiding e-commerce entirely","Using only a single distribution channel","Selling only in physical retail stores"], k:"hlfyLq00JZLFfVe7DgB5Oc" },
+{ value:300, q:"Digital channel integration involves:",
+options:["Only using email as a sales channel","Eliminating all physical retail locations","Coordinating online and offline channels so customers have a seamless brand experience","Keeping online and offline operations completely separate"], k:"FKruvifwBrSVSRKZIWC1iz" },
+{ value:400, q:"An omnichannel approach differs from a simple multichannel approach because it:",
+options:["Uses only one channel","Ignores customer data across channels","Focuses exclusively on in-store experiences","Integrates all channels into a unified, consistent customer experience"], k:"6zJ8AsM_Ndp9tKGJJX5c7a" },
+{ value:500, q:"Agile distribution operations refer to a supply chain's ability to:",
+options:["Quickly adapt to changes in demand, supply, or market conditions","Ignore disruptions in the supply chain","Follow a single fixed plan regardless of demand changes","Operate only through traditional retail channels"], k:"F4jxtFQFLT4TPcFtbBJH5G" }
+]
+},
+{
+category: "Digital Marketing Fundamentals",
+questions: [
+{ value:100, q:"Digital marketing refers to:",
+options:["Traditional television commercials exclusively","Direct mail campaigns only","Marketing efforts that use electronic devices and the internet to connect with customers","Only print advertising"], k:"kDSDOxSqnDJqQx8bXFG1Hp" },
+{ value:200, q:"Search engine marketing (SEM) involves:",
+options:["Using paid search ads to increase visibility in search engine results","Sending physical mail to customers","Only organic, unpaid website traffic","In-store product displays"], k:"XghuF3wuVJi_9izmuZTILm" },
+{ value:300, q:"Content marketing focuses on:",
+options:["Setting product prices","Only paid banner advertisements","Cold-calling potential customers","Creating and distributing valuable, relevant content to attract and engage a target audience"], k:"i2QSPOdrz-coU4xY9FkZDn" },
+{ value:400, q:"Social media marketing allows companies to:",
+options:["Avoid any direct interaction with customers","Eliminate the need for any other marketing channel","Engage directly with customers, build community, and gather real-time feedback","Only broadcast one-way messages with no engagement"], k:"m41ZwFkmqKd9CDewCQoQCb" },
+{ value:500, q:"Email marketing remains effective because it:",
+options:["Allows for personalized, targeted communication directly to interested customers","Is only useful for very large companies","Cannot be personalized","Has no measurable performance metrics"], k:"Vn0QNmLOWHiOnxAryjmW_v" }
+]
+},
+{
+category: "Nimble vs. Agile Organizations",
+questions: [
+{ value:100, q:"According to research on nimble organizations, being 'nimble' refers to an organization's ability to:",
+options:["Avoid any use of technology","Sense shifts in the market or internal dynamics and respond with speed and precision","Follow a single rigid annual plan with no changes","Focus solely on cost-cutting"], k:"vDiBlbFGgmJ-NDJEV2ubr-" },
+{ value:200, q:"According to The Brazilian BA's comparison, 'Agile' is best described as:",
+options:["A specific approach that adds value through collaboration, flexibility, and iterative practices","A financial reporting standard","A synonym with no meaningful difference from 'nimble'","The ability to react quickly and efficiently to any situation"], k:"bHA48sODoSZS21gqTX5K3_" },
+{ value:300, q:"A company can implement agile methodologies and still not be considered 'nimble' because:",
+options:["Agile methods automatically guarantee organizational nimbleness","Using agile practices does not guarantee the organization can actually sense and respond to change effectively","Nimble and agile always mean exactly the same thing","Nimble only applies to software development teams"], k:"KqmfJq2WM_RFDzXOOHjb7p" },
+{ value:400, q:"One key characteristic of nimble organizations is:",
+options:["Adaptability — the capacity to quickly adjust strategies, processes, and resources to changing circumstances","Resistance to changing strategies once set","Avoiding adaptation to customer needs","Centralized, slow decision-making processes"], k:"UuWifLW102scFPNNLJxuP-" },
+{ value:500, q:"Applying nimbleness to marketing and distribution operations means a company should be able to:",
+options:["Only rely on traditional, unchanging distribution methods","Quickly adjust marketing channels and distribution approaches in response to shifting market conditions","Ignore customer feedback when making channel decisions","Never revisit its marketing plan once launched"], k:"BProi1ulkqTX1I1BG_E6u4" }
+]
 }
-
-function openModal(ci, qi){
-  const cat = DATA[ci];
-  const q = cat.questions[qi];
-  currentKey = ci + '-' + qi;
-
-  document.getElementById('modalCat').textContent = cat.category;
-  document.getElementById('modalValue').textContent = '$' + q.value;
-  document.getElementById('modalQuestion').textContent = q.q;
-  document.getElementById('modalFeedback').textContent = '';
-  document.getElementById('modalFeedback').className = 'feedback';
-  document.getElementById('closeBtn').disabled = true;
-
-  const choicesEl = document.getElementById('modalChoices');
-  choicesEl.innerHTML = '';
-  const letters = ['A','B','C','D'];
-  q.options.forEach((opt, idx) => {
-    const div = document.createElement('div');
-    div.className = 'choice';
-    div.innerHTML = '<span class="letter">' + letters[idx] + '</span>' + opt;
-    div.addEventListener('click', () => selectAnswer(idx, q, div, choicesEl));
-    choicesEl.appendChild(div);
-  });
-
-  document.getElementById('overlay').classList.add('open');
-}
-
-function selectAnswer(idx, q, el, container){
-  Array.from(container.children).forEach(c => c.classList.add('locked'));
-  const feedback = document.getElementById('modalFeedback');
-
-  if(idx === q.correct){
-    el.classList.add('correct');
-    score += q.value;
-    feedback.textContent = 'Correct! +$' + q.value;
-    feedback.className = 'feedback correct-text';
-  } else {
-    el.classList.add('wrong');
-    Array.from(container.children)[q.correct].classList.add('correct');
-    score -= q.value;
-    feedback.textContent = 'Not quite. -$' + q.value;
-    feedback.className = 'feedback wrong-text';
-  }
-  usedSet.add(currentKey);
-  document.getElementById('closeBtn').disabled = false;
-}
-
-document.getElementById('closeBtn').addEventListener('click', () => {
-  document.getElementById('overlay').classList.remove('open');
-  rebuildGrid();
-});
-
-document.getElementById('resetBtn').addEventListener('click', () => {
-  score = 0;
-  usedSet.clear();
-  rebuildGrid();
-});
-
-rebuildGrid();
+]
+};
 </script>
-
+<script src="assets/jeopardy.js"></script>
 </body>
 </html>
